@@ -1,5 +1,6 @@
 export const paths = {
-  HOME: "/",
-  LIST: "/lists",
-  DETAIL: "/detail",
+  home: "/",
+  list: "/lists",
+  detail: "/detail",
+  payment: "/payment",
 };

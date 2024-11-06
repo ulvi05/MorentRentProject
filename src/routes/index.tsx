@@ -1,8 +1,27 @@
+import RootLayout from "@/components/shared/RootLayout";
+import { paths } from "@/constants/paths";
+import HomePage from "@/pages/home";
+import ListPage from "@/pages/lists";
+import PaymentPage from "@/pages/payment";
 import { createBrowserRouter } from "react-router-dom";
 
 export const router = createBrowserRouter([
   {
-    path: "/",
-    element: <div>Hello world!</div>,
+    path: "",
+    element: <RootLayout />,
+    children: [
+      {
+        path: paths.home,
+        element: <HomePage />,
+      },
+      {
+        path: paths.list,
+        element: <ListPage />,
+      },
+      {
+        path: paths.payment,
+        element: <PaymentPage />,
+      },
+    ],
   },
 ]);
