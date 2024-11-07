@@ -42,15 +42,15 @@ export default {
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
-          500: "hsl(var(--primary-500))",
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
-          400: "hsl((var(--secondary-400))",
+
           foreground: "hsl(var(--secondary-foreground))",
         },
         information: {
-          500: "hsl(var(--information-500))",
+          DEFAULT: "hsl(var(--information))",
+          foreground: "hsl(var(--information-foreground))",
         },
         muted: {
           DEFAULT: "hsl(var(--muted))",
