@@ -49,6 +49,9 @@ export default {
           400: "hsl((var(--secondary-400))",
           foreground: "hsl(var(--secondary-foreground))",
         },
+        information: {
+          500: "hsl(var(--information-500))",
+        },
         muted: {
           DEFAULT: "hsl(var(--muted))",
           foreground: "hsl(var(--muted-foreground))",
