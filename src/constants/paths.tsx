@@ -1,6 +1,6 @@
 export const paths = {
   home: "/",
   list: "/list",
-  detail: "/detail",
+  detail: (id = ":id") => `/detail/${id}`,
   payment: "/payment",
 };

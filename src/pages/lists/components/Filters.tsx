@@ -124,7 +124,7 @@ export const Filters = () => {
               Price
             </h4>
             <div>
-              <Slider />
+              <Slider className="cursor-pointer" />
               <p className="text-secondary text-lg lg:text-xl font-semibold tracking-[-0.4px] leading-[150%] mt-4">
                 Max. $100.00
               </p>

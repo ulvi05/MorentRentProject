@@ -6,14 +6,25 @@ import TransmissionImg from "@/assets/icons/transmission.svg";
 import PeopleImg from "@/assets/icons/people.svg";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
+import { paths } from "@/constants/paths";
 
 export const RentCard = () => {
   const [isLiked, setIsLiked] = useState(false);
+  const navigate = useNavigate();
+  const id = "962848f4-84c9-4318-95bc-b32da512631d";
+
+  function navigateDetailPage() {
+    navigate(paths.detail(id));
+  }
   return (
     <div className="w-full bg-white rounded-[10px] p-4 lg:p-6">
       <div className="flex justify-between">
         <div>
-          <h4 className="font-bold text-base text-secondary-500 lg:text-xl leading-[150%] tracking-[-0.6px]">
+          <h4
+            onClick={navigateDetailPage}
+            className="font-bold text-base text-secondary-500 lg:text-xl leading-[150%] tracking-[-0.6px] cursor-pointer hover:underline"
+          >
             Koenigsegg
           </h4>
           <p className="text-secondary-300 text-xs lg:text-sm leading-[150%] tracking-[-0.28px]">
@@ -24,7 +35,10 @@ export const RentCard = () => {
           <img src={isLiked ? HeardFilledSvg : HeardOutlinedSvg} alt="heart" />
         </button>
       </div>
-      <div className="relative mt-8 lg:mt-12">
+      <div
+        className="relative mt-8 cursor-pointer lg:mt-12"
+        onClick={navigateDetailPage}
+      >
         <img src={CarImg} alt="rolls-royce" className="w-full" />
         <div className="bg-[linear-gradient(180deg,rgba(255,255,255,0.00)_0%,#FFF_100%)] w-full h-[68px] absolute bottom-0" />
       </div>

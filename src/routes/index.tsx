@@ -1,5 +1,6 @@
 import RootLayout from "@/components/shared/RootLayout";
 import { paths } from "@/constants/paths";
+import { DetailPage } from "@/pages/detail";
 import HomePage from "@/pages/home";
 import RentListPage from "@/pages/lists";
 import PaymentPage from "@/pages/payment";
@@ -17,6 +18,10 @@ export const router = createBrowserRouter([
       {
         path: paths.list,
         element: <RentListPage />,
+      },
+      {
+        path: paths.detail(),
+        element: <DetailPage />,
       },
       {
         path: paths.payment,
