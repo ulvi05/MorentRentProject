@@ -1,6 +1,6 @@
 export const paths = {
   home: "/",
-  list: "/lists",
+  list: "/list",
   detail: "/detail",
   payment: "/payment",
 };

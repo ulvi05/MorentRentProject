@@ -1,7 +1,7 @@
 import RootLayout from "@/components/shared/RootLayout";
 import { paths } from "@/constants/paths";
 import HomePage from "@/pages/home";
-import ListPage from "@/pages/lists";
+import RentListPage from "@/pages/lists";
 import PaymentPage from "@/pages/payment";
 import { createBrowserRouter } from "react-router-dom";
 
@@ -16,7 +16,7 @@ export const router = createBrowserRouter([
       },
       {
         path: paths.list,
-        element: <ListPage />,
+        element: <RentListPage />,
       },
       {
         path: paths.payment,
