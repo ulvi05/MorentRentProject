@@ -4,6 +4,44 @@ import { FilterIcon } from "lucide-react";
 import { useRef, useState } from "react";
 import { useOnClickOutside } from "usehooks-ts";
 
+const filters = [
+  {
+    label: "Type",
+    options: [
+      {
+        value: "sport",
+        label: "Sport",
+        count: 5,
+      },
+      {
+        value: "suv",
+        label: "SUV",
+        count: 12,
+      },
+      {
+        value: "mpv",
+        label: "MPV",
+        count: 16,
+      },
+      {
+        value: "sedan",
+        label: "Sedan",
+        count: 20,
+      },
+      {
+        value: "coupe",
+        label: "Coupe",
+        count: 14,
+      },
+      {
+        value: "hatcback",
+        label: "Hatcback",
+        count: 14,
+      },
+    ],
+  },
+];
+
 export const Filters = () => {
   const [isOpen, setIsOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
