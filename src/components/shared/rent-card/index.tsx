@@ -1,13 +1,14 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { paths } from "@/constants/paths";
+
+import { Button } from "@/components/ui/button";
 import HeardFilledSvg from "@/assets/icons/heart-filled.svg";
 import HeardOutlinedSvg from "@/assets/icons/heart-outlined.svg";
 import CarImg from "@/assets/images/koenigsegg.png";
 import FuelImg from "@/assets/icons/fuel.svg";
 import TransmissionImg from "@/assets/icons/transmission.svg";
 import PeopleImg from "@/assets/icons/people.svg";
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
-import { paths } from "@/constants/paths";
 
 export const RentCard = () => {
   const [isLiked, setIsLiked] = useState(false);
