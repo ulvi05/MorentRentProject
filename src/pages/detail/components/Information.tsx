@@ -37,13 +37,13 @@ export const InformationSection = () => {
         <p className="text-secondary text-sm font-medium tracing-[-0.28px]">
           440+ Reviewer
         </p>
-        <button
-          onClick={() => setIsLiked(!isLiked)}
-          className="absolute h-fit right-6 top-6"
-        >
-          <img src={isLiked ? HeardFilledSvg : HeardOutlinedSvg} alt="heart" />
-        </button>
       </div>
+      <button
+        onClick={() => setIsLiked(!isLiked)}
+        className="absolute h-fit right-6 top-6"
+      >
+        <img src={isLiked ? HeardFilledSvg : HeardOutlinedSvg} alt="heart" />
+      </button>
       <p className="my-5 text-lg lg:my-8 lg:text-xl text-secondary !leading-[200%] tracking-[-0.4px]">
         NISMO has become the embodiment of Nissan's outstanding performance,
         inspired by the most unforgiving proving ground, the "race track".
