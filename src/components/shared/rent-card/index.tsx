@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { paths } from "@/constants/paths";
 
 import { Button } from "@/components/ui/button";
@@ -67,7 +67,9 @@ export const RentCard = () => {
         <p className="text-xl font-bold text-secondary-500">
           $99.00/ <span className="text-sm text-secondary-300">day</span>
         </p>
-        <Button>Rent Now</Button>
+        <Link replace to={"/payment"}>
+          <Button>Rent Now</Button>
+        </Link>
       </div>
     </div>
   );

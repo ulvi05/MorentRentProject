@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 
 import HeardFilledSvg from "@/assets/icons/heart-filled.svg";
 import HeardOutlinedSvg from "@/assets/icons/heart-outlined.svg";
+import { Link } from "react-router-dom";
 
 const specifications = [
   {
@@ -70,7 +71,9 @@ export const InformationSection = () => {
             $100.00
           </p>
         </div>
-        <Button>Rent Now</Button>
+        <Link replace to={"/payment"}>
+          <Button>Rent Now</Button>
+        </Link>
       </div>
     </div>
   );
