@@ -19,12 +19,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Button } from "@/components/ui/button";
+import SecurityImg from "@/assets/icons/security.svg";
 
 const FormSchema = z.object({
-  name: z.string().min(2, {
+  name: z.string() /*.min(2, {
     message: "Name must be at least 2 characters.",
-  }),
-  phone: z.string().min(10, { message: "Phone number must be valid." }),
+  }) */,
+  phone: z.string() /*.min(10, { message: "Phone number must be valid." }) */,
   address: z.string(),
   city: z.string(),
   pickUpLocation: z.string(),
@@ -33,6 +36,8 @@ const FormSchema = z.object({
   dropUpDate: z.string(),
   pickUpTime: z.string(),
   dropUpTime: z.string(),
+  newsLetter: z.boolean(),
+  termsConditions: z.boolean(),
 });
 
 type FormType = UseFormReturn<z.infer<typeof FormSchema>>;
@@ -51,6 +56,8 @@ export const Steps = () => {
       dropUpDate: "",
       pickUpTime: "",
       dropUpTime: "",
+      newsLetter: false,
+      termsConditions: false,
     },
   });
 
@@ -62,7 +69,7 @@ export const Steps = () => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col lg:gap-y-8 gap-y-6"
+        className="flex flex-col order-1 lg:gap-y-8 gap-y-6 lg:order-none"
       >
         <BillingStep form={form} />
         <RentalStep form={form} />
@@ -88,7 +95,7 @@ const BillingStep = ({ form }: { form: FormType }) => {
           Step 1 of 3
         </p>
       </div>
-      <div className="grid items-end grid-cols-2 gap-x-6 lg:gap-x-8 gap-y-4 lg:gap-y-6">
+      <div className="grid items-end sm:grid-cols-2 gap-x-6 lg:gap-x-8 gap-y-4 lg:gap-y-6">
         <FormField
           control={form.control}
           name="name"
@@ -174,7 +181,7 @@ const RentalStep = ({ form }: { form: FormType }) => {
           Pick - Up
         </p>
       </div>
-      <div className="grid grid-cols-2 gap-x-6 lg:gap-x-8 gap-y-4 lg:gap-y-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 lg:gap-x-8 gap-y-4 lg:gap-y-6">
         <FormField
           control={form.control}
           name="pickUpLocation"
@@ -250,10 +257,10 @@ const RentalStep = ({ form }: { form: FormType }) => {
           Drop - Off
         </p>
       </div>
-      <div className="grid grid-cols-2 gap-x-6 lg:gap-x-8 gap-y-4 lg:gap-y-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 lg:gap-x-8 gap-y-4 lg:gap-y-6">
         <FormField
           control={form.control}
-          name="pickUpLocation"
+          name="dropUpLocation"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Locations</FormLabel>
@@ -275,7 +282,7 @@ const RentalStep = ({ form }: { form: FormType }) => {
         />
         <FormField
           control={form.control}
-          name="pickUpLocation"
+          name="dropUpDate"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Date</FormLabel>
@@ -297,7 +304,7 @@ const RentalStep = ({ form }: { form: FormType }) => {
         />
         <FormField
           control={form.control}
-          name="pickUpLocation"
+          name="dropUpTime"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Time</FormLabel>
@@ -334,9 +341,61 @@ const ConfirmationStep = ({ form }: { form: FormType }) => {
             We are getting to the end. Just few clicks and your rental is ready!
           </p>
         </div>
-        <p className="text-secondary-300 text-sm font-medium leading-[150%] tracking-[-0.28px] mt-1 lg:mb-8 mb-6">
+        <p className="text-secondary-300 text-sm font-medium leading-[150%] tracking-[-0.28px] mt-1 lg:mb-8 mb-6 text-nowrap xl:text-wrap">
           Step 3 of 3
         </p>
+      </div>
+      <FormField
+        control={form.control}
+        name="newsLetter"
+        render={({ field }) => (
+          <FormItem className="flex flex-row items-start p-4 lg:px-8 space-x-5 space-y-0 rounded-[10px] bg-[#F6F7F9]">
+            <FormControl>
+              <Checkbox
+                checked={field.value}
+                onCheckedChange={field.onChange}
+              />
+            </FormControl>
+            <div className="leading-none">
+              <FormLabel className="cursor-pointer">
+                I agree with sending an Marketing and newsletter emails. No
+                spam, promissed!
+              </FormLabel>
+            </div>
+          </FormItem>
+        )}
+      />
+      <FormField
+        control={form.control}
+        name="termsConditions"
+        render={({ field }) => (
+          <FormItem className="flex flex-row items-start p-4 lg:px-8 space-x-5 space-y-0 rounded-[10px] bg-[#F6F7F9] mt-6">
+            <FormControl>
+              <Checkbox
+                checked={field.value}
+                onCheckedChange={field.onChange}
+              />
+            </FormControl>
+            <div className="leading-none">
+              <FormLabel className="cursor-pointer">
+                I agree with our terms and conditions and privacy policy.
+              </FormLabel>
+            </div>
+          </FormItem>
+        )}
+      />
+      <Button className="mt-6 lg:mt-8">Rent Now</Button>
+      <div className="flex flex-col mt-4 gap-y-4 lg:mt-8">
+        <img src={SecurityImg} alt="security-icn" className="w-8 h-8" />
+        <div className="flex flex-col items-start gap-1 lg:gap-2">
+          <h4 className="text-base font-semibold text-secondary-500 !tracking-[-0.32px]">
+            All your data are safe
+          </h4>
+          <p className="text-secondary-300 font-medium text-sm leading-[150%]">
+            We are using the most advanced security to provide you the best
+            experience ever.
+          </p>
+        </div>
       </div>
     </div>
   );

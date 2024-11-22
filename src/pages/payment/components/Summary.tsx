@@ -3,7 +3,7 @@ import { RatingStar } from "@/pages/detail/components/RatingStar";
 
 export const PaymentSummary = () => {
   return (
-    <div className="rounded-[10px] bg-white p-4 lg:p-6">
+    <div className="rounded-[10px] bg-white p-4 lg:p-6 h-fit lg:sticky top-[160px]">
       <h3 className="text-lg lg:text-xl font-bold leading-[150%] tracking-[-0.6px] text-secondary-500">
         Rental Summary
       </h3>
@@ -23,7 +23,7 @@ export const PaymentSummary = () => {
           </h2>
           <div className="flex items-center mt-2 gap-x-2">
             <RatingStar rating={4} />
-            <p className="text-secondary text-sm font-medium tracing-[-0.28px]">
+            <p className="text-secondary text-sm font-medium tracing-[-0.28px] text-nowrap xl:text-wrap">
               440+ Reviewer
             </p>
           </div>
