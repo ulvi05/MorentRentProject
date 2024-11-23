@@ -1,5 +1,5 @@
 import SummaryImg from "@/assets/images/summary.png";
-import { RatingStar } from "@/pages/detail/components/RatingStar";
+import { RatingStar } from "../../detail/components/RatingStar";
 
 export const PaymentSummary = () => {
   return (

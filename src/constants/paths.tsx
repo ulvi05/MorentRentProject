@@ -3,4 +3,8 @@ export const paths = {
   list: "/list",
   detail: (id = ":id") => `/detail/${id}`,
   payment: "/payment",
+  DASHBOARD: {
+    MAIN: "/dashboard",
+    RENTS: "/dashboard/rents",
+  },
 };

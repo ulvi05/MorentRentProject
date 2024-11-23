@@ -1,8 +1,8 @@
 import HeartIcon from "@/assets/icons/heart.svg";
 import NotificationIcon from "@/assets/icons/notification.svg";
 import SettingsIcon from "@/assets/icons/settings.svg";
+import { Button } from "@/components/ui/button";
 import { ModalTypeEnum, useDialog } from "@/hooks/useDialog";
-import { LogInIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const NavbarActions = () => {
@@ -33,12 +33,7 @@ const NavbarActions = () => {
       >
         <User2 color="#596780" />
       </Link> */}
-      <button
-        onClick={() => openDialog({ type: ModalTypeEnum.LOGIN })}
-        className="rounded-full border border-[#c3d4e966] opacity-80 hover:opacity-100 duration-75 p-2.5"
-      >
-        <LogInIcon color="#596780" />
-      </button>
+      <Button onClick={() => openDialog(ModalTypeEnum.LOGIN)}>Sign In</Button>
     </div>
   );
 };

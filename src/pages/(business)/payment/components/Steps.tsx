@@ -11,7 +11,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { PhoneInput } from "@/pages/payment/components/PhoneInput";
+import { PhoneInput } from "./PhoneInput";
 import {
   Select,
   SelectContent,
