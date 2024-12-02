@@ -3,23 +3,23 @@ import passport from "passport";
 
 export const authorize =
   ({ isAdmin = false }) =>
-  (req: Request, res: Response, next: NextFunction) => {
-    if (!req.isAuthenticated()) {
-      res.status(401).json({
-        message: "Unauthorized",
-      });
-      return;
-    }
+    (req: Request, res: Response, next: NextFunction) => {
+      if (!req.isAuthenticated()) {
+        res.status(401).json({
+          message: "Unauthorized",
+        });
+        return;
+      }
 
-    if (isAdmin && req.user.role !== "admin") {
-      res.status(403).json({
-        message: "Access denied",
-      });
-      return;
-    }
+      if (isAdmin && req.user.role !== "admin") {
+        res.status(403).json({
+          message: "Access denied",
+        });
+        return;
+      }
 
-    next();
-  };
+      next();
+    };
 
 export const authenticate = (req: Request, res: Response, next: NextFunction) =>
   passport.authenticate("local", (err: any, user: any, info: any) => {

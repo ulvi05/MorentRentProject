@@ -7,9 +7,10 @@ import passport from "passport";
 import cors from "cors";
 
 import authRoutes from "./routes/auth";
-// import profileRoutes from "./routes/profile.mjs";
-// import "./mongoose/schemas/user.mjs";
+import "./mongoose/schemas/user";
 import "./auth/local-strategy";
+
+// import profileRoutes from "./routes/profile";  
 dotenv.config();
 
 const PORT = process.env.PORT;

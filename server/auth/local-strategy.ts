@@ -2,8 +2,9 @@ import passport from "passport";
 import { Strategy } from "passport-local";
 import User from "../mongoose/schemas/user";
 import { comparePasswords } from "../utils/bcrypt";
+import { IUser } from "../types/user";
 
-passport.serializeUser((user: any, done) => {
+passport.serializeUser((user, done) => {
   done(null, user._id);
 });
 
@@ -12,9 +13,8 @@ passport.deserializeUser(async (id, done) => {
   if (!user) {
     return done(new Error("User not found"));
   }
-  const userObj = user.toObject();
-  // delete userObj.password;
-  // delete userObj.__v;
+  const userObj: IUser = user.toObject();
+  delete userObj.password;
   done(null, userObj);
 });
 
@@ -39,10 +39,8 @@ export default passport.use(
           });
         }
 
-        const userObj = user.toObject();
-        // delete userObj.password;
-        // delete userObj.__v;
-
+        const userObj: IUser = user.toObject();
+        delete userObj.password;
         done(null, userObj);
       } catch (error: any) {
         done(null, false, {

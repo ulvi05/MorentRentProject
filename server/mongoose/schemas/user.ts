@@ -1,16 +1,6 @@
 import mongoose from "mongoose";
 const { Schema } = mongoose;
 
-// interface IUser extends Document {
-//   name: string;
-//   surname: string;
-//   email: string;
-//   password: string;
-//   isBlocked: boolean;
-//   role: "admin" | "user";
-//   resetPasswordToken?: string | null;
-//   resetPasswordTokenExpires?: Date | null;
-// }
 
 const userSchema = new Schema({
   name: {
@@ -48,5 +38,15 @@ const userSchema = new Schema({
     default: null,
   },
 });
+
+
+
+userSchema.set("toJSON", {
+  virtuals: true,
+  transform: (_doc, ret) => {
+    delete ret.__v;
+  },
+});
+
 
 export default mongoose.model("User", userSchema);
