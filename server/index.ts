@@ -6,11 +6,13 @@ import session from "express-session";
 import passport from "passport";
 import cors from "cors";
 
-import authRoutes from "./routes/auth";
-import "./mongoose/schemas/user";
-import "./auth/local-strategy";
+import authRoutes from "./src/routes/auth";
+import locationRoutes from "./src/routes/location";
+import categoryRoutes from "./src/routes/category";
+import rentRoutes from "./src/routes/rent";
+import "./src/mongoose/schemas/user";
+import "./src/auth/local-strategy";
 
-// import profileRoutes from "./routes/profile";  
 dotenv.config();
 
 const PORT = process.env.PORT;
@@ -39,7 +41,9 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use("/auth", authRoutes);
-// app.use("/profile", profileRoutes);
+app.use("/location", locationRoutes);
+app.use("/category", categoryRoutes);
+app.use("/rent", rentRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

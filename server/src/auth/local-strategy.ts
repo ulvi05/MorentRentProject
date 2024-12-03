@@ -42,9 +42,9 @@ export default passport.use(
         const userObj: IUser = user.toObject();
         delete userObj.password;
         done(null, userObj);
-      } catch (error: any) {
+      } catch (error) {
         done(null, false, {
-          message: error.message,
+          message: (error as Error).message,
         });
       }
     }
