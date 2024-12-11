@@ -12,6 +12,7 @@ import categoryRoutes from "./src/routes/category";
 import rentRoutes from "./src/routes/rent";
 import "./src/mongoose/schemas/user";
 import "./src/auth/local-strategy";
+import path from "path";
 
 dotenv.config();
 
@@ -37,6 +38,7 @@ app.use(
     },
   })
 );
+app.use("/public", express.static(path.join(__dirname, "public")));
 app.use(passport.initialize());
 app.use(passport.session());
 
