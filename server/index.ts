@@ -6,9 +6,10 @@ import session from "express-session";
 import passport from "passport";
 import cors from "cors";
 
-import authRoutes from "./src/routes/auth";
+import reservationRoutes from "./src/routes/reservation";
 import locationRoutes from "./src/routes/location";
 import categoryRoutes from "./src/routes/category";
+import authRoutes from "./src/routes/auth";
 import rentRoutes from "./src/routes/rent";
 import "./src/mongoose/schemas/user";
 import "./src/auth/local-strategy";
@@ -46,6 +47,7 @@ app.use("/auth", authRoutes);
 app.use("/location", locationRoutes);
 app.use("/category", categoryRoutes);
 app.use("/rent", rentRoutes);
+app.use("/reservations", reservationRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
