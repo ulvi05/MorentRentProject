@@ -17,3 +17,14 @@ export const createReservationSchema: Schema = {
     notEmpty: true,
   },
 };
+
+export const changeStatusSchema: Schema = {
+  status: {
+    in: ["body"],
+    isString: true,
+    notEmpty: true,
+    isIn: {
+      options: [["approved", "rejected"]],
+    },
+  },
+};

@@ -41,6 +41,9 @@ const create = async (req: Request, res: Response) => {
       rent: rentId,
       startDate: { $lte: endDate },
       endDate: { $gte: startDate },
+      status: {
+        $in: ["pending", "approved"],
+      },
     });
 
     if (existReservation) {
@@ -75,7 +78,74 @@ const create = async (req: Request, res: Response) => {
   }
 };
 
+const cancel = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+
+    const reservation = await Reservation.findOne({
+      _id: id,
+      user: req.user?._id,
+      status: "pending",
+    });
+
+    if (!reservation) {
+      res.status(404).json({ message: "Reservation Not Found" });
+      return;
+    }
+
+    reservation.status = "cancelled";
+
+    await reservation.save();
+
+    res.json({
+      message: "Reservation cancelled successfully",
+      item: reservation,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+const changeStatus = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.matchedData;
+
+    const reservation = await Reservation.findById(id);
+
+    if (!reservation) {
+      res.status(404).json({ message: "Reservation Not Found" });
+      return;
+    }
+
+    if (
+      reservation.status === "cancelled" ||
+      reservation.status === "rejected"
+    ) {
+      res
+        .status(400)
+        .json({ message: "Reservation is already cancelled or rejected" });
+      return;
+    }
+
+    reservation.status = status;
+
+    await reservation.save();
+
+    res.json({
+      message: "Reservation status updated successfully",
+      item: reservation,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
 export default {
   getAll,
   create,
+  cancel,
+  changeStatus,
 };

@@ -24,6 +24,11 @@ const reservationSchema = new Schema({
     type: Number,
     required: true,
   },
+  status: {
+    type: String,
+    enum: ["pending", "approved", "rejected", "cancelled"],
+    default: "pending",
+  },
 });
 
 reservationSchema.set("toJSON", {
