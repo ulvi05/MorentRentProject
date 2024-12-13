@@ -8,7 +8,7 @@ import crypto from "crypto";
 
 const login = (req: Request, res: Response) => {
   res.json({
-    message: "Login successful",
+    message: `Welcome back, ${req.user?.name}`,
     user: req.user,
   });
 };

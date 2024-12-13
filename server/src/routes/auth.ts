@@ -7,7 +7,7 @@ import {
 } from "../validation/auth";
 
 import validateSchema from "../middlewares/validator";
-import { authenticate } from "../middlewares/user";
+import { authenticate, authorize } from "../middlewares/user";
 import authController from "../controllers/auth";
 
 const router = Router();
@@ -22,7 +22,7 @@ router.post(
 
 router.post("/logout", authController.logout);
 
-router.get("/current-user", authController.currentUser);
+router.get("/current-user", authorize({}), authController.currentUser);
 
 router.post(
   "/forgot-password",

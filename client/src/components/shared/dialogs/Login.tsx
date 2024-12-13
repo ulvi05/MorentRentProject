@@ -1,15 +1,16 @@
-import { z } from "zod";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { useDialog, ModalTypeEnum } from "@/hooks/useDialog";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
+import { useAppDispatch } from "@/hooks/redux";
+import { AxiosError } from "axios";
+import { toast } from "sonner";
+import { z } from "zod";
+
+import { AuthResponseType } from "@/services/auth/types";
+import authService from "@/services/auth";
+import { useDialog, ModalTypeEnum } from "@/hooks/useDialog";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Form,
   FormControl,
@@ -18,7 +19,14 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { getCurrentUserAsync } from "@/store/features/userSlice";
 
 const formSchema = z.object({
   email: z.string().min(2).max(50),
@@ -36,15 +44,29 @@ export const LoginDialog = () => {
     },
   });
 
+  const dispatch = useAppDispatch();
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: authService.login,
+    onSuccess: (response) => {
+      toast.success(response.data.message);
+      closeDialog();
+      dispatch(getCurrentUserAsync());
+    },
+    onError: (error: AxiosError<AuthResponseType>) => {
+      const message =
+        error.response?.data.message ??
+        "Something went wrong Please try again.";
+      toast.error(message);
+    },
+  });
+
   if (isOpen && type !== ModalTypeEnum.LOGIN) {
     return null;
   }
 
-  // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+    mutate(values);
   }
 
   return (
@@ -84,14 +106,25 @@ export const LoginDialog = () => {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input placeholder="Type password" {...field} />
+                    <Input
+                      type="password"
+                      placeholder="Type password"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <Button type="submit" className="w-full">
-              Sign In
+            <Button type="submit" className="w-full" disabled={isPending}>
+              {isPending ? (
+                <div className="flex items-center justify-center gap-2">
+                  <span className="inline-block w-4 h-4 border-2 rounded-full loader spinner-border animate-spin border-t-transparent"></span>
+                  Signing In...
+                </div>
+              ) : (
+                "Sign In"
+              )}
             </Button>
           </form>
         </Form>

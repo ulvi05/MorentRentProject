@@ -19,11 +19,16 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useMutation } from "@tanstack/react-query";
+import authService from "@/services/auth";
+import { AxiosError } from "axios";
+import { AuthResponseType } from "@/services/auth/types";
+import { toast } from "sonner";
 
 const formSchema = z
   .object({
-    firstName: z.string().min(2).max(20),
-    lastName: z.string().min(2).max(20),
+    name: z.string().min(2).max(20),
+    surname: z.string().min(2).max(20),
     email: z.string().min(2).max(50),
     password: z.string().min(2).max(20),
     confirmPassword: z.string().min(2).max(20),
@@ -39,11 +44,25 @@ export const RegisterDialog = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      firstName: "",
-      lastName: "",
+      name: "",
+      surname: "",
       email: "",
       password: "",
       confirmPassword: "",
+    },
+  });
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: authService.register,
+    onSuccess: (response) => {
+      toast.success(response.data.message);
+      openDialog(ModalTypeEnum.LOGIN);
+    },
+    onError: (error: AxiosError<AuthResponseType>) => {
+      const message =
+        error.response?.data?.message ??
+        "Something went wrong! Please try again.";
+      toast.error(message);
     },
   });
 
@@ -51,11 +70,8 @@ export const RegisterDialog = () => {
     return null;
   }
 
-  // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+    mutate(values);
   }
 
   return (
@@ -77,7 +93,7 @@ export const RegisterDialog = () => {
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
             <FormField
               control={form.control}
-              name="firstName"
+              name="name"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>First Name</FormLabel>
@@ -90,7 +106,7 @@ export const RegisterDialog = () => {
             />
             <FormField
               control={form.control}
-              name="lastName"
+              name="surname"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Last Name</FormLabel>
@@ -121,7 +137,7 @@ export const RegisterDialog = () => {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input placeholder="********" {...field} />
+                    <Input type="password" placeholder="********" {...field} />
                   </FormControl>
                   <FormMessage className="h-5" />
                 </FormItem>
@@ -134,14 +150,21 @@ export const RegisterDialog = () => {
                 <FormItem>
                   <FormLabel>Confirm password</FormLabel>
                   <FormControl>
-                    <Input placeholder="********" {...field} />
+                    <Input type="password" placeholder="********" {...field} />
                   </FormControl>
                   <FormMessage className="h-5" />
                 </FormItem>
               )}
             />
-            <Button type="submit" className="w-full">
-              Sign Up
+            <Button type="submit" className="w-full" disabled={isPending}>
+              {isPending ? (
+                <div className="flex items-center justify-center gap-2">
+                  <span className="inline-block w-4 h-4 border-2 rounded-full loader spinner-border animate-spin border-t-transparent"></span>
+                  Signing Up...
+                </div>
+              ) : (
+                "Sign Up"
+              )}
             </Button>
           </form>
         </Form>
