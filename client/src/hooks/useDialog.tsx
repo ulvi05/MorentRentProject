@@ -3,6 +3,7 @@ import { create } from "zustand";
 export enum ModalTypeEnum {
   LOGIN = "login",
   REGISTER = "register",
+  FORGOT = "forgot-password",
 }
 
 interface DialogState {

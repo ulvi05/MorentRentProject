@@ -116,6 +116,13 @@ export const LoginDialog = () => {
                 </FormItem>
               )}
             />
+            <button
+              className="text-sm underline text-primary"
+              onClick={() => openDialog(ModalTypeEnum.FORGOT)}
+              type="button"
+            >
+              Forgot Password?
+            </button>
             <Button type="submit" className="w-full" disabled={isPending}>
               {isPending ? (
                 <div className="flex items-center justify-center gap-2">

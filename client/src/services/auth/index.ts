@@ -21,6 +21,21 @@ const getCurrentUser = async () => {
   return await axiosInstance.get("/auth/current-user");
 };
 
-const authService = { login, register, getCurrentUser, logout };
+const ForgotPassword = async (payload: { email: string }) => {
+  return await axiosInstance.post("/auth/forgot-password", payload);
+};
+
+const ResetPassword = async (payload: { password: string; token: string }) => {
+  return await axiosInstance.post("/auth/reset-password", payload);
+};
+
+const authService = {
+  login,
+  register,
+  getCurrentUser,
+  logout,
+  ForgotPassword,
+  ResetPassword,
+};
 
 export default authService;

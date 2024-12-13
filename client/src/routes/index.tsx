@@ -10,6 +10,7 @@ import PaymentPage from "@/pages/(business)/payment";
 import { DashboadMainPage } from "@/pages/(dashboard)/main";
 import { DashboardRentsPage } from "@/pages/(dashboard)/rents";
 import DashboardLayout from "@/components/shared/DashboardLayout";
+import { ResetPassword } from "@/pages/(business)/reset-password";
 
 export const router = createBrowserRouter([
   {
@@ -31,6 +32,10 @@ export const router = createBrowserRouter([
       {
         path: paths.payment,
         element: <PaymentPage />,
+      },
+      {
+        path: paths.reset_password(),
+        element: <ResetPassword />,
       },
       {
         path: "",
