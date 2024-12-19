@@ -2,76 +2,62 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Slider } from "@/components/ui/slider";
 import { cn } from "@/lib/utils";
+import categoryService from "@/services/category";
+import { useQuery } from "@tanstack/react-query";
 import { FilterIcon } from "lucide-react";
-import { useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { useOnClickOutside } from "usehooks-ts";
-
-const filters = [
-  {
-    label: "t y p e",
-    options: [
-      {
-        value: "sport",
-        label: "Sport",
-        count: 5,
-      },
-      {
-        value: "suv",
-        label: "SUV",
-        count: 12,
-      },
-      {
-        value: "mpv",
-        label: "MPV",
-        count: 16,
-      },
-      {
-        value: "sedan",
-        label: "Sedan",
-        count: 20,
-      },
-      {
-        value: "coupe",
-        label: "Coupe",
-        count: 14,
-      },
-      {
-        value: "hatcback",
-        label: "Hatcback",
-        count: 14,
-      },
-    ],
-  },
-  {
-    label: "c a p a c i t y",
-    options: [
-      {
-        value: "2",
-        label: "2 Person",
-        count: 7,
-      },
-      {
-        value: "4",
-        label: "4 Person",
-        count: 3,
-      },
-      {
-        value: "6",
-        label: "6 Person",
-        count: 5,
-      },
-      {
-        value: "8",
-        label: "8 And More",
-        count: 6,
-      },
-    ],
-  },
-];
 
 export const Filters = () => {
   const [isOpen, setIsOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+  const { data: categoryResponse } = useQuery({
+    queryKey: ["categories"],
+    queryFn: categoryService.getAll,
+  });
+
+  const CategoryOptions = useMemo(() => {
+    if (!categoryResponse) return [];
+    return categoryResponse.data.items.map((category) => ({
+      value: category._id,
+      label: category.name,
+    }));
+  }, [categoryResponse]);
+
+  const filters = useMemo(
+    () => [
+      {
+        label: "t y p e",
+        options: CategoryOptions,
+      },
+      {
+        label: "c a p a c i t y",
+        options: [
+          {
+            value: "2",
+            label: "2 Person",
+            count: 7,
+          },
+          {
+            value: "4",
+            label: "4 Person",
+            count: 3,
+          },
+          {
+            value: "6",
+            label: "6 Person",
+            count: 5,
+          },
+          {
+            value: "8",
+            label: "8 And More",
+            count: 6,
+          },
+        ],
+      },
+    ],
+    [CategoryOptions]
+  );
 
   function toggle() {
     setIsOpen(!isOpen);

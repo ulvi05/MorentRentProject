@@ -1,14 +1,18 @@
 import { Button } from "@/components/ui/button";
 import SwapIcon from "@/assets/icons/swap-icn.svg";
-import { ReactNode, useMemo } from "react";
+import { ReactNode, useMemo, useState } from "react";
 import { CustomSelect } from "../Select";
 import { useQuery } from "@tanstack/react-query";
 import locationService from "@/services/location";
 import { SelectOption } from "@/types";
 import categoryService from "@/services/category";
-import { useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { cn } from "@/lib/utils";
+import { paths } from "@/constants/paths";
 
 export const AvailabilityFilter = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [rotate, setRotate] = useState(false);
   const { data: locationsResponse } = useQuery({
     queryKey: ["locations"],
     queryFn: locationService.getAll,
@@ -34,6 +38,19 @@ export const AvailabilityFilter = () => {
     }));
   }, [categoryResponse]);
 
+  const handleSwap = () => {
+    setRotate(!rotate);
+    const pickupLocation = searchParams.get("pickup-location");
+    const dropoffLocation = searchParams.get("dropoff-location");
+    if (dropoffLocation)
+      searchParams.set("pickup-location", dropoffLocation || "");
+    else searchParams.delete("pickup-location");
+    if (pickupLocation)
+      searchParams.set("dropoff-location", pickupLocation || "");
+    else searchParams.delete("dropoff-location");
+    setSearchParams(searchParams);
+  };
+
   return (
     <div className="grid lg:grid-cols-[1fr_60px_1fr] gap-x-5 lg:gap-x-7 xl:gap-x-[44px] items-center">
       <Card
@@ -51,7 +68,13 @@ export const AvailabilityFilter = () => {
         }
         type="pickup"
       />
-      <Button className="w-fit h-fit p-[18px] mx-auto -my-4 lg:my-0 z-10">
+      <Button
+        onClick={handleSwap}
+        className={cn(
+          "w-fit h-fit p-[18px] mx-auto -my-4 lg:my-0 z-10 transition-all duration-300",
+          rotate ? "rotate-180" : "rotate-0"
+        )}
+      >
         <img src={SwapIcon} alt="swap" className="w-6 h-6" />
       </Button>
       <Card
@@ -84,13 +107,17 @@ const Card = ({
   heading: ReactNode;
   type: "pickup" | "dropoff";
 }) => {
+  const location = useLocation();
+  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const selectedLocation = searchParams.get(`${type}-location`);
-  const selectedCategory = searchParams.get(`${type}-category`);
 
   function handleChange(field: string, value: string) {
     searchParams.set(`${type}-${field}`, value);
     setSearchParams(searchParams);
+    if (location.pathname === "/") {
+      navigate(paths.list + "?" + searchParams.toString());
+    }
   }
 
   return (
@@ -105,16 +132,6 @@ const Card = ({
           label="Locations"
           options={locationsOptions}
           placeholder="Select your city"
-        />
-        <div className="w-full h-full bg-[#c3d4e966]" />
-        <CustomSelect
-          value={selectedCategory}
-          onChange={(value) => {
-            handleChange("category", value);
-          }}
-          label="Category"
-          options={categoryOptions}
-          placeholder="Select your category"
         />
         <div className="w-full h-full bg-[#c3d4e966]" />
         {/* <CustomSelect

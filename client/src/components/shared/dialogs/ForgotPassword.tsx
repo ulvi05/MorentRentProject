@@ -43,6 +43,7 @@ export const ForgotPasswordDialog = () => {
     mutationFn: authService.ForgotPassword,
     onSuccess: (response) => {
       toast.success(response.data.message);
+      form.reset();
       closeDialog();
     },
     onError: (error: AxiosError<AuthResponseType>) => {

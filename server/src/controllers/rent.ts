@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import Rent from "../mongoose/schemas/rent";
+import Category from "../mongoose/schemas/category";
 
 const getAll = async (req: Request, res: Response) => {
   try {
@@ -76,7 +77,7 @@ const create = async (req: Request, res: Response) => {
     const {
       name,
       description,
-      category,
+      categoryId,
       pickUpLocation,
       dropOffLocation,
       fuel,
@@ -86,6 +87,15 @@ const create = async (req: Request, res: Response) => {
       currency,
       discount,
     } = req.matchedData;
+
+    const category = await Category.findById(categoryId);
+
+    if (!category) {
+      res.status(404).json({
+        message: "Category Not Found",
+      });
+      return;
+    }
 
     const images = (req.files as any)?.map((file: any) => file.filename) || [];
 
@@ -103,8 +113,11 @@ const create = async (req: Request, res: Response) => {
       discount,
       images,
     });
-
     await rent.save();
+
+    category.rents.push(rent._id);
+    await category.save();
+
     res.status(201).json({
       message: "Success",
       item: rent,
@@ -125,13 +138,22 @@ const edit = async (req: Request, res: Response) => {
       ...req.matchedData,
     };
 
+    const { categoryId } = data;
+
+    const category = await Category.findById(categoryId);
+
+    if (!category) {
+      res.status(404).json({
+        message: "Category Not Found",
+      });
+      return;
+    }
+
     if (req.files && (req.files as any).length > 0) {
       data.images = (req.files as any).map((file: any) => file.filename);
     }
 
-    const rent = await Rent.findByIdAndUpdate(id, data, {
-      new: true,
-    });
+    const rent = await Rent.findById(id);
 
     if (!rent) {
       res.status(400).json({
@@ -139,6 +161,19 @@ const edit = async (req: Request, res: Response) => {
       });
       return;
     }
+
+    const oldCategoryId = rent.category;
+
+    await Category.findByIdAndUpdate(oldCategoryId, {
+      $pull: {
+        rents: id,
+      },
+    });
+    category.rents.push(rent._id);
+    await category.save();
+
+    rent.updateOne(data);
+    await rent.save();
 
     res.json({
       message: "Success",

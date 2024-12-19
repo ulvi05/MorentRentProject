@@ -56,6 +56,7 @@ export const RegisterDialog = () => {
     mutationFn: authService.register,
     onSuccess: (response) => {
       toast.success(response.data.message);
+      form.reset();
       openDialog(ModalTypeEnum.LOGIN);
     },
     onError: (error: AxiosError<AuthResponseType>) => {

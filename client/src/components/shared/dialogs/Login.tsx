@@ -50,13 +50,14 @@ export const LoginDialog = () => {
     mutationFn: authService.login,
     onSuccess: (response) => {
       toast.success(response.data.message);
+      form.reset();
       closeDialog();
       dispatch(getCurrentUserAsync());
     },
     onError: (error: AxiosError<AuthResponseType>) => {
       const message =
         error.response?.data.message ??
-        "Something went wrong Please try again.";
+        "Something went wrong. Please try again.";
       toast.error(message);
     },
   });
