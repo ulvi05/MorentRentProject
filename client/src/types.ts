@@ -17,6 +17,7 @@ export type Category = {
   _id: string;
   createdAt: string;
   name: string;
+  count: number;
 };
 
 export type SelectOption = {

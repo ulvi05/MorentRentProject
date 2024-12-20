@@ -2,7 +2,14 @@ import { Request, Response } from "express";
 import Category from "../mongoose/schemas/category";
 
 const getAll = async (_req: Request, res: Response) => {
-  const items = await Category.find();
+  const data = await Category.find();
+
+  const items = data.map((item) => ({
+    _id: item._id,
+    name: item.name,
+    count: item.rents.length,
+    createdAt: item.createdAt,
+  }));
 
   res.json({
     message: "Categories retrieved successfully",

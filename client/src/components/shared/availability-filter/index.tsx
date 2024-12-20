@@ -98,7 +98,6 @@ export const AvailabilityFilter = () => {
 
 const Card = ({
   locationsOptions,
-  categoryOptions,
   heading,
   type,
 }: {

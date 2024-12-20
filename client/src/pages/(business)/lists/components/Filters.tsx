@@ -6,9 +6,20 @@ import categoryService from "@/services/category";
 import { useQuery } from "@tanstack/react-query";
 import { FilterIcon } from "lucide-react";
 import { useMemo, useRef, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { useOnClickOutside } from "usehooks-ts";
 
+type Filters = {
+  label: string;
+  options: {
+    value: string;
+    label: string;
+    count?: number;
+  }[];
+}[];
+
 export const Filters = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [isOpen, setIsOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const { data: categoryResponse } = useQuery({
@@ -21,10 +32,11 @@ export const Filters = () => {
     return categoryResponse.data.items.map((category) => ({
       value: category._id,
       label: category.name,
+      count: category.count,
     }));
   }, [categoryResponse]);
 
-  const filters = useMemo(
+  const filters: Filters = useMemo(
     () => [
       {
         label: "t y p e",
@@ -36,22 +48,18 @@ export const Filters = () => {
           {
             value: "2",
             label: "2 Person",
-            count: 7,
           },
           {
             value: "4",
             label: "4 Person",
-            count: 3,
           },
           {
             value: "6",
             label: "6 Person",
-            count: 5,
           },
           {
             value: "8",
             label: "8 And More",
-            count: 6,
           },
         ],
       },
@@ -65,6 +73,24 @@ export const Filters = () => {
 
   function HandleClose() {
     setIsOpen(false);
+  }
+
+  function handleChange(type: string, option: string) {
+    const params = searchParams.getAll(type.toLowerCase());
+
+    let newParams: string[] = [];
+    if (params.includes(String(option))) {
+      newParams = params.filter((param) => param !== String(option));
+    } else {
+      newParams = [...params, String(option)];
+    }
+
+    searchParams.delete(type.toLowerCase());
+    newParams.forEach((param) => {
+      searchParams.append(type.toLowerCase(), param);
+    });
+
+    setSearchParams(searchParams);
   }
 
   useOnClickOutside(ref, HandleClose);
@@ -89,6 +115,7 @@ export const Filters = () => {
                   <div key={option.label} className="flex items-center gap-x-2">
                     <Checkbox
                       id={`${filter.label}-${option.value}`}
+                      onClick={() => handleChange(filter.label, option.value)}
                       className="w-5 h-5"
                     />
                     <label
@@ -96,9 +123,11 @@ export const Filters = () => {
                       className="text-lg font-semibold text-secondary lg:text-xl leading-[150%] tracking-[-0.4px] cursor-pointer"
                     >
                       {option.label}{" "}
-                      <span className="text-secondary-300">
-                        ({option.count})
-                      </span>
+                      {option.count && (
+                        <span className="text-secondary-300">
+                          ({option.count})
+                        </span>
+                      )}
                     </label>
                   </div>
                 ))}
