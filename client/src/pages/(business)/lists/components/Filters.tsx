@@ -1,6 +1,6 @@
+import MultiRangeSlider from "@/components/shared/multi-range-slider";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Slider } from "@/components/ui/slider";
 import { cn } from "@/lib/utils";
 import categoryService from "@/services/category";
 import { useQuery } from "@tanstack/react-query";
@@ -39,11 +39,11 @@ export const Filters = () => {
   const filters: Filters = useMemo(
     () => [
       {
-        label: "t y p e",
+        label: "type",
         options: CategoryOptions,
       },
       {
-        label: "c a p a c i t y",
+        label: "capacity",
         options: [
           {
             value: "2",
@@ -93,6 +93,15 @@ export const Filters = () => {
     setSearchParams(searchParams);
   }
 
+  function handleRangeChange(min: number, max: number) {
+    if (min === 0) searchParams.delete("minPrice");
+    else searchParams.set("minPrice", String(min));
+
+    if (max === 1000) searchParams.delete("maxPrice");
+    else searchParams.set("maxPrice", String(max));
+    setSearchParams(searchParams);
+  }
+
   useOnClickOutside(ref, HandleClose);
 
   return (
@@ -138,12 +147,7 @@ export const Filters = () => {
             <h4 className="text-xs font-semibold tracking-[-0.24px] text-secondary mb-7 uppercase ">
               Price
             </h4>
-            <div>
-              <Slider className="cursor-pointer" />
-              <p className="text-secondary text-lg lg:text-xl font-semibold tracking-[-0.4px] leading-[150%] mt-4">
-                Max. $100.00
-              </p>
-            </div>
+            <MultiRangeSlider min={0} max={1000} onChange={handleRangeChange} />
           </div>
         </div>
       </div>

@@ -1,10 +1,12 @@
 import { RentCard } from "@/components/shared/rent-card";
 import { Filters } from "./components/Filters";
 import { AvailabilityFilter } from "@/components/shared/availability-filter";
+import { ScrollToTop } from "@/components/shared/ScrollToTop";
 
 const RentListPage = () => {
   return (
     <div className="grid xl:grid-cols-[360px,1fr]">
+      <ScrollToTop />
       <Filters />
       <div className="bg-white" />
       <div className="flex flex-col px-6 pt-6 gap-y-6 lg:px-8 lg:pt-8 lg:gap-y-8">
