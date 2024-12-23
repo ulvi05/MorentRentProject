@@ -7,8 +7,9 @@ import RentListPage from "@/pages/(business)/lists";
 import { DetailPage } from "@/pages/(business)/detail";
 import PaymentPage from "@/pages/(business)/payment";
 
-import { DashboadMainPage } from "@/pages/(dashboard)/main";
-import { DashboardRentsPage } from "@/pages/(dashboard)/rents";
+import DashboadMainPage from "@/pages/(dashboard)/main";
+import DashboardRentListPage from "@/pages/(dashboard)/rent/list";
+import DashboardRentCreatePage from "@/pages/(dashboard)/rent/create";
 import DashboardLayout from "@/components/shared/DashboardLayout";
 import { ResetPassword } from "@/pages/(business)/reset-password";
 
@@ -46,8 +47,12 @@ export const router = createBrowserRouter([
             element: <DashboadMainPage />,
           },
           {
-            path: paths.DASHBOARD.RENTS,
-            element: <DashboardRentsPage />,
+            path: paths.DASHBOARD.RENTS.LIST,
+            element: <DashboardRentListPage />,
+          },
+          {
+            path: paths.DASHBOARD.RENTS.CREATE,
+            element: <DashboardRentCreatePage />,
           },
         ],
       },

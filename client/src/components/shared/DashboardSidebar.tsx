@@ -1,4 +1,6 @@
-import { Calendar, CarIcon, Home, Inbox, Search, Settings } from "lucide-react";
+import { CarIcon, Home } from "lucide-react";
+import { paths } from "@/constants/paths";
+import { Link } from "react-router-dom";
 
 import {
   Sidebar,
@@ -10,9 +12,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { paths } from "@/constants/paths";
 
-// Menu items.
 const items = [
   {
     title: "Dashboard",
@@ -21,7 +21,7 @@ const items = [
   },
   {
     title: "Car Rents",
-    url: paths.DASHBOARD.RENTS,
+    url: paths.DASHBOARD.RENTS.LIST,
     icon: CarIcon,
   },
 ];
@@ -37,10 +37,10 @@ export const DashboardSidebar = () => {
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <a href={item.url}>
+                    <Link to={item.url}>
                       <item.icon />
                       <span>{item.title}</span>
-                    </a>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}

@@ -20,6 +20,24 @@ export type Category = {
   count: number;
 };
 
+export type Rent = {
+  _id: string;
+  name: string;
+  fuel: string;
+  gearBox: string;
+  price: number;
+  description: string;
+  capacity: number;
+  createdAt: string;
+  currency: string;
+  discount: number;
+  category: Category;
+  dropOffLocations: Location[];
+  images: string[];
+  pickUpLocation: Location;
+  showInRecommendation: boolean;
+};
+
 export type SelectOption = {
   value: string;
   label: string;

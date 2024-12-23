@@ -6,6 +6,10 @@ export const paths = {
   reset_password: (token = ":token") => `/reset-password/${token}`,
   DASHBOARD: {
     MAIN: "/dashboard",
-    RENTS: "/dashboard/rents",
+    RENTS: {
+      LIST: "/dashboard/rents",
+      CREATE: "/dashboard/rents/create",
+      DETAIL: (id: ":id") => `/dashboard/rents/${id}`,
+    },
   },
 };
