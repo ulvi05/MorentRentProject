@@ -8,10 +8,12 @@ import { DetailPage } from "@/pages/(business)/detail";
 import PaymentPage from "@/pages/(business)/payment";
 
 import DashboadMainPage from "@/pages/(dashboard)/main";
-import DashboardRentListPage from "@/pages/(dashboard)/rent/list";
-import DashboardRentCreatePage from "@/pages/(dashboard)/rent/create";
 import DashboardLayout from "@/components/shared/DashboardLayout";
 import { ResetPassword } from "@/pages/(business)/reset-password";
+
+import DashboardRentListPage from "@/pages/(dashboard)/rent/list";
+import DashboardRentCreatePage from "@/pages/(dashboard)/rent/create";
+import DashboardRentEditPage from "@/pages/(dashboard)/rent/edit";
 
 export const router = createBrowserRouter([
   {
@@ -53,6 +55,10 @@ export const router = createBrowserRouter([
           {
             path: paths.DASHBOARD.RENTS.CREATE,
             element: <DashboardRentCreatePage />,
+          },
+          {
+            path: paths.DASHBOARD.RENTS.EDIT(":id"),
+            element: <DashboardRentEditPage />,
           },
         ],
       },

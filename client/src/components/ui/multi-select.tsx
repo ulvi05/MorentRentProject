@@ -129,6 +129,7 @@ export const MultiSelect = React.forwardRef<
       onValueChange,
       variant,
       defaultValue = [],
+      value,
       placeholder = "Select options",
       animation = 0,
       maxCount = 3,
@@ -189,6 +190,10 @@ export const MultiSelect = React.forwardRef<
         onValueChange(allValues);
       }
     };
+
+    React.useEffect(() => {
+      setSelectedValues((value as string[]) || []);
+    }, [value]);
 
     return (
       <Popover

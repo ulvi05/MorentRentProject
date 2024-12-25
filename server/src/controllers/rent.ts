@@ -80,6 +80,39 @@ const getAll = async (req: Request, res: Response) => {
   }
 };
 
+const getById = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+
+    const rent = await Rent.findById(id).populate([
+      "category",
+      "pickUpLocation",
+      "dropOffLocation",
+    ]);
+
+    if (!rent) {
+      res.status(404).json({
+        message: "Not Found",
+      });
+      return;
+    }
+
+    rent.images = rent.images.map(
+      (image) => `${process.env.BASE_URL}/public/rent/${image}`
+    );
+
+    res.json({
+      message: "Success",
+      item: rent,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      message: "Internal Server Error",
+    });
+  }
+};
+
 const create = async (req: Request, res: Response) => {
   try {
     const {
@@ -180,7 +213,18 @@ const edit = async (req: Request, res: Response) => {
     category.rents.push(rent._id);
     await category.save();
 
-    rent.updateOne(data);
+    rent.name = data.name;
+    rent.description = data.description;
+    rent.category = data.categoryId;
+    rent.pickUpLocation = data.pickUpLocation;
+    rent.dropOffLocation = data.dropOffLocation;
+    rent.fuel = data.fuel;
+    rent.gearBox = data.gearBox;
+    rent.capacity = data.capacity;
+    rent.price = data.price;
+    rent.discount = data.discount;
+    if (data.images) rent.images = data.images;
+
     await rent.save();
 
     res.json({
@@ -222,6 +266,7 @@ const remove = async (req: Request, res: Response) => {
 
 export default {
   getAll,
+  getById,
   create,
   edit,
   remove,

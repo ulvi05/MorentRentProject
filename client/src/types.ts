@@ -23,7 +23,7 @@ export type Category = {
 export type Rent = {
   _id: string;
   name: string;
-  fuel: string;
+  fuel: number;
   gearBox: string;
   price: number;
   description: string;
@@ -32,7 +32,7 @@ export type Rent = {
   currency: string;
   discount: number;
   category: Category;
-  dropOffLocations: Location[];
+  dropOffLocation: Location[];
   images: string[];
   pickUpLocation: Location;
   showInRecommendation: boolean;

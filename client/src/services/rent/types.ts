@@ -4,3 +4,22 @@ export type GetAllRentResponse = {
   items: Rent[];
   message: string;
 };
+export type GetByIdRentResponse = {
+  item: Rent;
+  message: string;
+};
+
+export type RentRequestPayload = {
+  name: string;
+  description: string;
+  price: number;
+  discount: number;
+  capacity: number;
+  fuel: number;
+  gearBox: string;
+  categoryId: string;
+  pickUpLocation: string;
+  dropOffLocation: string[];
+  images?: File[];
+  showInRecommendation: boolean;
+};
