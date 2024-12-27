@@ -139,6 +139,11 @@ export const createRentSchema: Schema = {
     isNumeric: true,
     optional: true,
   },
+  showInRecommendation: {
+    in: ["body"],
+    isBoolean: true,
+    optional: true,
+  },
   files: {
     custom: {
       options: (_, { req }) => {
@@ -206,6 +211,11 @@ export const editRentSchema: Schema = {
   discount: {
     in: ["body"],
     isNumeric: true,
+    optional: true,
+  },
+  showInRecommendation: {
+    in: ["body"],
+    isBoolean: true,
     optional: true,
   },
 };

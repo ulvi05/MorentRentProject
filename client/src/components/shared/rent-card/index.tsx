@@ -5,14 +5,22 @@ import { paths } from "@/constants/paths";
 import { Button } from "@/components/ui/button";
 import HeardFilledSvg from "@/assets/icons/heart-filled.svg";
 import HeardOutlinedSvg from "@/assets/icons/heart-outlined.svg";
-import CarImg from "@/assets/images/koenigsegg.png";
 import FuelImg from "@/assets/icons/fuel.svg";
 import TransmissionImg from "@/assets/icons/transmission.svg";
 import PeopleImg from "@/assets/icons/people.svg";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Rent } from "@/types";
 
-export const RentCard = () => {
+type Props = {
+  rent: Rent;
+};
+
+export const RentCard = ({ rent }: Props) => {
   const [isLiked, setIsLiked] = useState(false);
   const navigate = useNavigate();
+
+  const { name, category, fuel, gearBox, images, capacity, price } = rent;
+  const mainImage = images[0];
   const id = "962848f4-84c9-4318-95bc-b32da512631d";
 
   function navigateDetailPage() {
@@ -26,10 +34,10 @@ export const RentCard = () => {
             onClick={navigateDetailPage}
             className="font-bold text-base text-secondary-500 lg:text-xl leading-[150%] tracking-[-0.6px] cursor-pointer hover:underline"
           >
-            Koenigsegg
+            {name}
           </h4>
           <p className="text-secondary-300 text-xs lg:text-sm leading-[150%] tracking-[-0.28px]">
-            Sport
+            {category.name}
           </p>
         </div>
         <button onClick={() => setIsLiked(!isLiked)} className="h-fit">
@@ -40,36 +48,72 @@ export const RentCard = () => {
         className="relative mt-8 cursor-pointer lg:mt-12"
         onClick={navigateDetailPage}
       >
-        <img src={CarImg} alt="rolls-royce" className="w-full" />
+        <img src={mainImage} alt="rolls-royce" className="w-full" />
         <div className="bg-[linear-gradient(180deg,rgba(255,255,255,0.00)_0%,#FFF_100%)] w-full h-[68px] absolute bottom-0" />
       </div>
       <div className="flex items-center justify-between mt-5 lg:mt-9">
         <div className="flex gap-1.5 items-center">
           <img src={FuelImg} alt="Fuel" />
           <p className="text-sm font-medium text-secondary-300  leading-[24px] tracking-[-0.28px]">
-            90L
+            {fuel}L
           </p>
         </div>
         <div className="flex gap-1.5 items-center">
           <img src={TransmissionImg} alt="Transmission" />
           <p className="text-sm font-medium text-secondary-300  leading-[24px] tracking-[-0.28px]">
-            Manual
+            {gearBox}
           </p>
         </div>
         <div className="flex gap-1.5 items-center">
           <img src={PeopleImg} alt="People" />
           <p className="text-sm font-medium text-secondary-300  leading-[24px] tracking-[-0.28px]">
-            2 People
+            {capacity} People
           </p>
         </div>
       </div>
       <div className="flex items-center justify-between mt-3 lg:mt-6">
         <p className="text-xl font-bold text-secondary-500">
-          $99.00/ <span className="text-sm text-secondary-300">day</span>
+          ${price}/ <span className="text-sm text-secondary-300">day</span>
         </p>
         <Link replace to={"/payment"}>
           <Button>Rent Now</Button>
         </Link>
+      </div>
+    </div>
+  );
+};
+
+RentCard.Skeleton = function () {
+  return (
+    <div className="w-full bg-white rounded-[10px] p-4 lg:p-6">
+      <div className="flex justify-between">
+        <div>
+          <Skeleton className="w-32 h-6 mb-2" />
+          <Skeleton className="w-16 h-4" />
+        </div>
+        <Skeleton className="w-8 h-8 rounded-full" />
+      </div>
+      <div className="relative mt-8 lg:mt-12">
+        <Skeleton className="object-contain w-full h-32" />
+        <div className="bg-[linear-gradient(180deg,rgba(255,255,255,0.00)_0%,#FFF_100%)] w-full h-[68px] absolute bottom-0"></div>
+      </div>
+      <div className="flex items-center justify-between mt-5 lg:mt-9">
+        <div className="flex gap-1.5 items-center">
+          <Skeleton className="w-4 h-4 rounded-full" />
+          <Skeleton className="w-8 h-4" />
+        </div>
+        <div className="flex gap-1.5 items-center">
+          <Skeleton className="w-4 h-4 rounded-full" />
+          <Skeleton className="w-16 h-4" />
+        </div>
+        <div className="flex gap-1.5 items-center">
+          <Skeleton className="w-4 h-4 rounded-full" />
+          <Skeleton className="w-12 h-4" />
+        </div>
+      </div>
+      <div className="flex items-center justify-between mt-3 lg:mt-6">
+        <Skeleton className="w-20 h-6" />
+        <Skeleton className="w-24 h-10 rounded-md" />
       </div>
     </div>
   );

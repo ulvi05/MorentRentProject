@@ -3,10 +3,25 @@ import {
   RentRequestPayload,
   GetAllRentResponse,
   GetByIdRentResponse,
+  GetAllRequestQueryData,
 } from "./types";
 
-const getAll = async () => {
-  return await axiosInstance.get<GetAllRentResponse>("/rent");
+const getAll = async (queryData: GetAllRequestQueryData) => {
+  const searchParams = new URLSearchParams();
+  const keys = Object.keys(queryData);
+
+  keys.forEach((key) => {
+    if (queryData[key as keyof GetAllRequestQueryData]) {
+      searchParams.append(
+        key,
+        String(queryData[key as keyof GetAllRequestQueryData])
+      );
+    }
+  });
+
+  return await axiosInstance.get<GetAllRentResponse>(
+    `/rent?${searchParams.toString()}`
+  );
 };
 
 const getById = async (id: string) => {

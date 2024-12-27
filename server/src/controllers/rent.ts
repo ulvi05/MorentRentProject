@@ -21,7 +21,7 @@ const getAll = async (req: Request, res: Response) => {
       $and: [],
     };
 
-    if (type === "recommendation") {
+    if (type === "recommended") {
       filter.showInRecommendation = true;
     }
 
@@ -59,9 +59,11 @@ const getAll = async (req: Request, res: Response) => {
     }
 
     const items = await Rent.find(filter)
-      .skip(skip)
-      .limit(take)
+      .skip(+skip)
+      .limit(+take)
       .populate(["category", "pickUpLocation", "dropOffLocation"]);
+
+    const total = await Rent.countDocuments(filter);
 
     items.forEach((item) => {
       item.images = item.images.map(
@@ -71,6 +73,9 @@ const getAll = async (req: Request, res: Response) => {
     res.json({
       message: "Success",
       items,
+      total,
+      take: +take,
+      skip: +skip,
     });
   } catch (error) {
     console.log(error);
@@ -127,6 +132,7 @@ const create = async (req: Request, res: Response) => {
       price,
       currency,
       discount,
+      showInRecommendation = false,
     } = req.matchedData;
 
     const category = await Category.findById(categoryId);
@@ -153,6 +159,7 @@ const create = async (req: Request, res: Response) => {
       currency,
       discount,
       images,
+      showInRecommendation,
     });
     await rent.save();
 
@@ -224,6 +231,8 @@ const edit = async (req: Request, res: Response) => {
     rent.price = data.price;
     rent.discount = data.discount;
     if (data.images) rent.images = data.images;
+    if (data.showInRecommendation !== undefined)
+      rent.showInRecommendation = data.showInRecommendation;
 
     await rent.save();
 
@@ -250,6 +259,12 @@ const remove = async (req: Request, res: Response) => {
         message: "Not Found",
       });
       return;
+    }
+
+    if (rent.category) {
+      await Category.findByIdAndUpdate(rent.category, {
+        $pull: { rents: id },
+      });
     }
 
     res.json({

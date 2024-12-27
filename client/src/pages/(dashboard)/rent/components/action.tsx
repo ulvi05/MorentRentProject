@@ -155,18 +155,10 @@ const ActionForm = ({ type }: Props) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: editItem?.name || "",
-      description: editItem?.description || "",
-      price: editItem?.price,
-      discount: editItem?.discount,
-      categoryId: editItem?.category?._id || "",
-      fuel: editItem?.fuel,
-      gearBox: editItem?.gearBox || "",
-      pickUpLocation: editItem?.pickUpLocation?._id || "",
-      dropOffLocation:
-        editItem?.dropOffLocation.map((item: any) => item._id) || [],
-      capacity: editItem?.capacity,
-      showInRecommendation: editItem?.showInRecommendation || false,
+      name: "",
+      description: "",
+      price: 0,
+      categoryId: "",
     },
   });
 
@@ -188,7 +180,9 @@ const ActionForm = ({ type }: Props) => {
   useEffect(() => {
     if (type === "create") {
       form.reset();
-    } else if (editItem) {
+    }
+
+    if (editItem) {
       form.setValue("name", editItem.name);
       form.setValue("description", editItem.description);
       form.setValue("price", editItem.price);
@@ -204,7 +198,7 @@ const ActionForm = ({ type }: Props) => {
       form.setValue("capacity", editItem.capacity);
       form.setValue("showInRecommendation", editItem.showInRecommendation);
     }
-  }, [type, editItem, form]);
+  }, [type, editItem]);
 
   if (isLoading) {
     return (
@@ -343,10 +337,9 @@ const ActionForm = ({ type }: Props) => {
                 <FormItem>
                   <FormLabel>Category</FormLabel>
                   <Select
-                    {...field}
                     onValueChange={field.onChange}
-                    defaultValue={field.value || ""}
-                    value={field.value || ""}
+                    defaultValue={field.value}
+                    value={field.value}
                   >
                     <FormControl>
                       <SelectTrigger>
@@ -373,8 +366,8 @@ const ActionForm = ({ type }: Props) => {
                   <FormLabel>Pick Up Location</FormLabel>
                   <Select
                     onValueChange={field.onChange}
-                    defaultValue={field.value || ""}
-                    value={field.value || ""}
+                    defaultValue={field.value}
+                    value={field.value}
                   >
                     <FormControl>
                       <SelectTrigger>
@@ -403,7 +396,7 @@ const ActionForm = ({ type }: Props) => {
                     options={locationOptions}
                     onValueChange={field.onChange}
                     // defaultValue={selectedFrameworks}
-                    value={field.value || ""}
+                    value={field.value}
                     placeholder="Select Drop Off Locations"
                     variant="inverted"
                   />
@@ -469,9 +462,8 @@ const ActionForm = ({ type }: Props) => {
           <RenderIf condition={!!editItem?.images.length}>
             <h4 className="mb-1">Existing Images</h4>
             <div className="grid grid-cols-3 gap-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8">
-              {editItem?.images.map((image: string, index: number) => (
+              {editItem?.images.map((image: string) => (
                 <img
-                  key={index}
                   src={image}
                   alt="Rent Image"
                   className="object-cover w-full rounded-lg"
