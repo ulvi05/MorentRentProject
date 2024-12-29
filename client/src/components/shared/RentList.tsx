@@ -4,6 +4,9 @@ import { Link } from "react-router-dom";
 import { RenderIf } from "./RenderIf";
 import { Rent } from "@/types";
 
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay, Navigation } from "swiper/modules";
+
 type Props = {
   heading: string;
   maxCols?: number;
@@ -28,7 +31,7 @@ export const RentList = ({
         </Button>
       </div>
       <div
-        className={`grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-${maxCols} md:gap-6 lg:gap-8`}
+        className={`hidden md:grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-${maxCols} md:gap-6 lg:gap-8`}
       >
         <RenderIf condition={isLoading}>
           {[1, 2, 3, 4, 5, 6, 7, 8].map((index) => (
@@ -40,6 +43,32 @@ export const RentList = ({
             <RentCard key={rent._id} rent={rent} />
           ))}
         </RenderIf>
+      </div>
+      <div className="md:hidden">
+        <Swiper
+          loop
+          navigation
+          autoplay={{ delay: 2000 }}
+          spaceBetween={10}
+          slidesPerView={2}
+          className="w-full"
+          modules={[Navigation, Autoplay]}
+        >
+          {/* <RenderIf condition={isLoading}>
+            {[1, 2, 3, 4, 5, 6, 7, 8].map((index) => (
+              <SwiperSlide key={index}>
+                <RentCard.Skeleton key={index} />
+              </SwiperSlide>
+            ))}
+          </RenderIf> */}
+          <RenderIf condition={!isLoading}>
+            {rents?.map((rent) => (
+              <SwiperSlide key={rent._id}>
+                <RentCard key={rent._id} rent={rent} />
+              </SwiperSlide>
+            ))}
+          </RenderIf>
+        </Swiper>
       </div>
     </div>
   );

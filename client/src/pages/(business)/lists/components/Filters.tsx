@@ -39,7 +39,7 @@ export const Filters = () => {
   const filters: Filters = useMemo(
     () => [
       {
-        label: "type",
+        label: "category",
         options: CategoryOptions,
       },
       {
@@ -94,11 +94,11 @@ export const Filters = () => {
   }
 
   function handleRangeChange(min: number, max: number) {
-    if (min === 0) searchParams.delete("minPrice");
-    else searchParams.set("minPrice", String(min));
+    if (min === 0) searchParams.delete("min_price");
+    else searchParams.set("min_price", String(min));
 
-    if (max === 1000) searchParams.delete("maxPrice");
-    else searchParams.set("maxPrice", String(max));
+    if (max === 500) searchParams.delete("max_price");
+    else searchParams.set("max_price", String(max));
     setSearchParams(searchParams);
   }
 
@@ -125,6 +125,9 @@ export const Filters = () => {
                     <Checkbox
                       id={`${filter.label}-${option.value}`}
                       onClick={() => handleChange(filter.label, option.value)}
+                      defaultChecked={searchParams
+                        .getAll(filter.label.toLowerCase())
+                        .includes(option.value)}
                       className="w-5 h-5"
                     />
                     <label
@@ -147,7 +150,7 @@ export const Filters = () => {
             <h4 className="text-xs font-semibold tracking-[-0.24px] text-secondary mb-7 uppercase ">
               Price
             </h4>
-            <MultiRangeSlider min={0} max={1000} onChange={handleRangeChange} />
+            <MultiRangeSlider min={0} max={500} onChange={handleRangeChange} />
           </div>
         </div>
       </div>

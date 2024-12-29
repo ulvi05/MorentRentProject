@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { paths } from "@/constants/paths";
 
 import { Button } from "@/components/ui/button";
@@ -17,25 +17,20 @@ type Props = {
 
 export const RentCard = ({ rent }: Props) => {
   const [isLiked, setIsLiked] = useState(false);
-  const navigate = useNavigate();
 
-  const { name, category, fuel, gearBox, images, capacity, price } = rent;
+  const { _id, name, category, fuel, gearBox, images, capacity, price } = rent;
   const mainImage = images[0];
-  const id = "962848f4-84c9-4318-95bc-b32da512631d";
 
-  function navigateDetailPage() {
-    navigate(paths.detail(id));
-  }
   return (
     <div className="w-full bg-white rounded-[10px] p-4 lg:p-6">
       <div className="flex justify-between">
         <div>
-          <h4
-            onClick={navigateDetailPage}
+          <Link
+            to={paths.detail(_id)}
             className="font-bold text-base text-secondary-500 lg:text-xl leading-[150%] tracking-[-0.6px] cursor-pointer hover:underline"
           >
             {name}
-          </h4>
+          </Link>
           <p className="text-secondary-300 text-xs lg:text-sm leading-[150%] tracking-[-0.28px]">
             {category.name}
           </p>
@@ -44,13 +39,13 @@ export const RentCard = ({ rent }: Props) => {
           <img src={isLiked ? HeardFilledSvg : HeardOutlinedSvg} alt="heart" />
         </button>
       </div>
-      <div
+      <Link
+        to={paths.detail(_id)}
         className="relative mt-8 cursor-pointer lg:mt-12"
-        onClick={navigateDetailPage}
       >
-        <img src={mainImage} alt="rolls-royce" className="w-full" />
+        <img src={mainImage} alt="rolls-royce" className="w-full mt-2" />
         <div className="bg-[linear-gradient(180deg,rgba(255,255,255,0.00)_0%,#FFF_100%)] w-full h-[68px] absolute bottom-0" />
-      </div>
+      </Link>
       <div className="flex items-center justify-between mt-5 lg:mt-9">
         <div className="flex gap-1.5 items-center">
           <img src={FuelImg} alt="Fuel" />

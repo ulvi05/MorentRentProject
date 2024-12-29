@@ -9,6 +9,9 @@ import { router } from "./routes";
 import { store } from "./store";
 
 import "./styles/index.css";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/zoom";
 
 createRoot(document.getElementById("root")!).render(
   <Provider store={store}>

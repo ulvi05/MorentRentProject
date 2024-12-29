@@ -1,24 +1,31 @@
-import { RentCard } from "@/components/shared/rent-card";
-import { Filters } from "./components/Filters";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import InfiniteScroll from "react-infinite-scroll-component";
+import { useMemo } from "react";
+
 import { AvailabilityFilter } from "@/components/shared/availability-filter";
 import { ScrollToTop } from "@/components/shared/ScrollToTop";
+import { RentCard } from "@/components/shared/rent-card";
+import { RenderIf } from "@/components/shared/RenderIf";
+import { Filters } from "./components/Filters";
+import rentService from "@/services/rent";
 import { LIST_TAKE_COUNT } from "@/constants";
 import { QUERY_KEYS } from "@/constants/query-keys";
-import rentService from "@/services/rent";
 import { Rent } from "@/types";
-import { useInfiniteQuery } from "@tanstack/react-query";
-import { useMemo } from "react";
-import { RenderIf } from "@/components/shared/RenderIf";
-import { Button } from "@/components/ui/button";
+import { ClipLoader } from "react-spinners";
+import { useSearchParams } from "react-router-dom";
 
 const RentListPage = () => {
+  const [searchParams] = useSearchParams();
   const { data, isLoading, fetchNextPage, hasNextPage } = useInfiniteQuery({
-    queryKey: [QUERY_KEYS.RENT_LIST],
+    queryKey: [QUERY_KEYS.RENT_LIST, searchParams.toString()],
     queryFn: ({ pageParam }: { pageParam: number }) =>
-      rentService.getAll({
-        take: LIST_TAKE_COUNT,
-        skip: pageParam,
-      }),
+      rentService.getAll(
+        {
+          take: LIST_TAKE_COUNT,
+          skip: pageParam,
+        },
+        searchParams.toString()
+      ),
     initialPageParam: 0,
     getNextPageParam: (lastPage) => {
       const hasNextPage =
@@ -40,22 +47,38 @@ const RentListPage = () => {
       <ScrollToTop />
       <Filters />
       <div className="bg-white" />
-      <div className="flex flex-col px-6 pt-6 gap-y-6 lg:px-8 lg:pt-8 lg:gap-y-8">
+      <div className="flex flex-col px-6 pt-6 pb-10 gap-y-6 lg:px-8 lg:pt-8 lg:gap-y-8">
         <AvailabilityFilter />
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4">
-          <RenderIf condition={isLoading}>
-            {[...Array(LIST_TAKE_COUNT)].map((_, index) => (
-              <RentCard.Skeleton key={index} />
-            ))}
-          </RenderIf>
+        <InfiniteScroll
+          dataLength={rents.length}
+          next={fetchNextPage}
+          hasMore={hasNextPage}
+          loader={
+            <div className="flex flex-col items-center mx-auto mt-4 w-60 gap-x-3 text-muted-foreground">
+              <ClipLoader />
+              <p>Loading more items...</p>
+            </div>
+          }
+          endMessage={
+            <RenderIf condition={!isLoading}>
+              <p className="mt-4 text-center text-muted-foreground">
+                No more items to show
+              </p>
+            </RenderIf>
+          }
+        >
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4">
+            <RenderIf condition={isLoading}>
+              {[...Array(LIST_TAKE_COUNT)].map((_, index) => (
+                <RentCard.Skeleton key={index} />
+              ))}
+            </RenderIf>
 
-          {rents.map((rent) => (
-            <RentCard key={rent._id} rent={rent} />
-          ))}
-        </div>
-        <Button disabled={!hasNextPage} onClick={() => fetchNextPage()}>
-          Load More
-        </Button>
+            {rents.map((rent) => (
+              <RentCard key={rent._id} rent={rent} />
+            ))}
+          </div>
+        </InfiniteScroll>
       </div>
     </div>
   );

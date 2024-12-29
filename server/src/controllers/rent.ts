@@ -19,6 +19,7 @@ const getAll = async (req: Request, res: Response) => {
 
     const filter: Record<string, any> = {
       $and: [],
+      $or: [],
     };
 
     if (type === "recommended") {
@@ -26,10 +27,10 @@ const getAll = async (req: Request, res: Response) => {
     }
 
     if (search) {
-      filter.$or = [
+      filter.$or.push(
         { name: { $regex: new RegExp(search, "i") } },
-        { description: { $regex: new RegExp(search, "i") } },
-      ];
+        { description: { $regex: new RegExp(search, "i") } }
+      );
     }
 
     if (capacity) {
@@ -55,7 +56,9 @@ const getAll = async (req: Request, res: Response) => {
     }
 
     if (dropoff_location) {
-      filter.dropOffLocation = dropoff_location;
+      filter.dropOffLocation = {
+        $in: [dropoff_location],
+      };
     }
 
     const items = await Rent.find(filter)
