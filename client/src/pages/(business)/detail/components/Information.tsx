@@ -6,6 +6,8 @@ import HeardFilledSvg from "@/assets/icons/heart-filled.svg";
 import HeardOutlinedSvg from "@/assets/icons/heart-outlined.svg";
 import { Link } from "react-router-dom";
 import { Rent } from "@/types";
+import { paths } from "@/constants/paths";
+import { formatPrice } from "@/lib/utils";
 
 type Props = {
   rent: Rent;
@@ -14,6 +16,7 @@ type Props = {
 export const InformationSection = ({ rent }: Props) => {
   const [isLiked, setIsLiked] = useState(false);
   const {
+    _id,
     name,
     description,
     fuel,
@@ -30,8 +33,6 @@ export const InformationSection = ({ rent }: Props) => {
     { label: "Steering", value: gearBox },
     { label: "Gasoline", value: `${fuel}L` },
   ];
-
-  const originalPrice = Math.floor(price / (1 - discount / 100));
 
   return (
     <div className="bg-white rounded-[10px] p-4 lg:p-6 relative">
@@ -50,7 +51,7 @@ export const InformationSection = ({ rent }: Props) => {
       >
         <img src={isLiked ? HeardFilledSvg : HeardOutlinedSvg} alt="heart" />
       </button>
-      <p className="min-h-[120px] my-5 text-lg lg:my-8 lg:text-xl text-secondary !leading-[200%] tracking-[-0.4px]">
+      <p className="min-h-[160px] my-5 text-lg lg:my-8 lg:text-xl text-secondary !leading-[200%] tracking-[-0.4px]">
         {description}
       </p>
       <div className="flex flex-wrap items-center justify-between gap-4">
@@ -68,16 +69,19 @@ export const InformationSection = ({ rent }: Props) => {
       <div className="flex items-center justify-between mt-12 lg:mt-16">
         <div>
           <p className="text-[28px] font-bold text-secondary-500">
-            ${price}/ <span className="text-base text-secondary-300">days</span>
+            {formatPrice(price - discount)}/{" "}
+            <span className="text-base text-secondary-300">days</span>
           </p>
 
           <p className="-mt-2 text-base font-bold line-through text-secondary-300">
-            ${originalPrice}
+            {formatPrice(price)}
           </p>
         </div>
-        <Link replace to={"/payment"}>
-          <Button>Rent Now</Button>
-        </Link>
+        <Button asChild>
+          <Link replace to={paths.payment(_id)}>
+            Rent Now
+          </Link>
+        </Button>
       </div>
     </div>
   );

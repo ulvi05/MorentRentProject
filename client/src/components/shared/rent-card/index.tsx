@@ -10,6 +10,7 @@ import TransmissionImg from "@/assets/icons/transmission.svg";
 import PeopleImg from "@/assets/icons/people.svg";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Rent } from "@/types";
+import { formatPrice } from "@/lib/utils";
 
 type Props = {
   rent: Rent;
@@ -68,11 +69,14 @@ export const RentCard = ({ rent }: Props) => {
       </div>
       <div className="flex items-center justify-between mt-3 lg:mt-6">
         <p className="text-xl font-bold text-secondary-500">
-          ${price}/ <span className="text-sm text-secondary-300">day</span>
+          {formatPrice(price)}/{" "}
+          <span className="text-sm text-secondary-300">day</span>
         </p>
-        <Link replace to={"/payment"}>
-          <Button>Rent Now</Button>
-        </Link>
+        <Button asChild>
+          <Link replace to={paths.payment(_id)}>
+            Rent Now
+          </Link>
+        </Button>
       </div>
     </div>
   );

@@ -1,7 +1,15 @@
-import SummaryImg from "@/assets/images/summary.png";
+import { formatPrice } from "@/lib/utils";
 import { RatingStar } from "../../detail/components/RatingStar";
+import { Rent } from "@/types";
 
-export const PaymentSummary = () => {
+type Props = {
+  rent: Rent;
+};
+
+export const PaymentSummary = ({ rent }: Props) => {
+  const { name, images, price } = rent;
+  const mainImage = images[0];
+
   return (
     <div className="rounded-[10px] bg-white p-4 lg:p-6 h-fit lg:sticky top-[160px]">
       <h3 className="text-lg lg:text-xl font-bold leading-[150%] tracking-[-0.6px] text-secondary-500">
@@ -13,13 +21,13 @@ export const PaymentSummary = () => {
       </p>
       <div className="flex items-center mb-6 gap-x-4 lg:mb-8">
         <img
-          src={SummaryImg}
-          alt="summary"
-          className="w-[132px] h-[108px] object-contain"
+          src={mainImage}
+          alt="rent picture"
+          className="w-[132px] h-[108px] object-cover rounded-md"
         />
         <div>
           <h2 className="text-2xl lg:text-[32px] font-bold text-secondary-500 leading-[150%] tracking-[-0.96px]">
-            Nissan GT - R
+            {name}
           </h2>
           <div className="flex items-center mt-2 gap-x-2">
             <RatingStar rating={4} />
@@ -40,7 +48,7 @@ export const PaymentSummary = () => {
           </p>
         </div>
         <p className="text-secondary-500 text-2xl lg:text-[32px] !leading-normal font-bold">
-          $80.00
+          {formatPrice(price)}
         </p>
       </div>
     </div>

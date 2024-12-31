@@ -2,7 +2,7 @@ export const paths = {
   home: "/",
   list: "/list",
   detail: (id = ":id") => `/detail/${id}`,
-  payment: "/payment",
+  payment: (id = ":id") => `/payment/${id}`,
   reset_password: (token = ":token") => `/reset-password/${token}`,
   DASHBOARD: {
     MAIN: "/dashboard",

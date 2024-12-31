@@ -10,17 +10,20 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { RenderIf } from "../shared/RenderIf";
 
 type Props = {
   onChange: (date?: Date) => void;
   hidePastDates?: boolean;
-  defaultDate: string | null;
+  defaultDate?: string | null;
+  variant?: "primary" | "secondary";
 };
 
 export function DatePicker({
   onChange,
   hidePastDates = false,
   defaultDate,
+  variant = "primary",
 }: Props) {
   const [date, setDate] = useState<Date | undefined>(
     defaultDate ? new Date(defaultDate) : undefined
@@ -33,10 +36,14 @@ export function DatePicker({
           variant={"ghost"}
           className={cn(
             "w-full justify-start text-left p-0 hover:bg-transparent text-xs !text-secondary-300 font-medium tracking-[-0.24px]",
-            !date && "text-muted-foreground"
+            !date && "text-muted-foreground",
+            variant === "secondary" &&
+              "p-4 bg-[#F6F7F9] hover:bg-[#F6F7F9] text-sm font-normal rounded-md shadow-sm"
           )}
         >
-          <CalendarIcon className="w-4 h-4 mr-2" />
+          <RenderIf condition={variant === "primary"}>
+            <CalendarIcon className="w-4 h-4 mr-2" />
+          </RenderIf>
           {date ? format(date, "PPP") : <span>Pick a date</span>}
         </Button>
       </PopoverTrigger>

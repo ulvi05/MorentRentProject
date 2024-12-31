@@ -52,7 +52,6 @@ export const DetailPage = () => {
       </div>
     );
   }
-  console.log(rent);
 
   return (
     <div className="container max-w-[1144px] py-6 lg:py-8">

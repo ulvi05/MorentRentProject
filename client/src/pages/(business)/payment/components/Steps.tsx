@@ -22,22 +22,38 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import SecurityImg from "@/assets/icons/security.svg";
+import { useQueryClient } from "@tanstack/react-query";
+import { QUERY_KEYS } from "@/constants/query-keys";
+import { RenderIf } from "@/components/shared/RenderIf";
+import { DatePicker } from "@/components/ui/date-picker";
+import { cn } from "@/lib/utils";
+import { useParams } from "react-router-dom";
+import { GetByIdRentResponse } from "@/services/rent/types";
+import { AxiosResponse } from "axios";
+import { Location } from "@/types";
+import { useEffect } from "react";
 
 const FormSchema = z.object({
-  name: z.string() /*.min(2, {
-    message: "Name must be at least 2 characters.",
-  }) */,
-  phone: z.string() /*.min(10, { message: "Phone number must be valid." }) */,
-  address: z.string(),
-  city: z.string(),
-  pickUpLocation: z.string(),
-  dropUpLocation: z.string(),
-  pickUpDate: z.string(),
-  dropUpDate: z.string(),
-  pickUpTime: z.string(),
-  dropUpTime: z.string(),
-  newsLetter: z.boolean(),
-  termsConditions: z.boolean(),
+  name: z.string().min(4, {
+    message: "Name must be at least 4 characters.",
+  }),
+  phone: z.string().min(10, { message: "Phone number must be valid." }),
+  address: z.string().min(4, { message: "Address must be least 4 characters" }),
+  city: z.string().min(4, { message: "City must be least 4 characters" }),
+  pickUpLocation: z
+    .string()
+    .min(1, { message: "Pick up location is required" }),
+  dropUpLocation: z
+    .string()
+    .min(1, { message: "Drop off location is required" }),
+  pickUpDate: z.string().min(1, { message: "Pick up date is required" }),
+  dropUpDate: z.string().min(1, { message: "Drop off date is required" }),
+  newsLetter: z.literal<boolean>(true, {
+    message: "You must agree to receive newsletter",
+  }),
+  termsConditions: z.literal<boolean>(true, {
+    message: "You must agree to terms and conditions",
+  }),
 });
 
 type FormType = UseFormReturn<z.infer<typeof FormSchema>>;
@@ -54,8 +70,6 @@ export const Steps = () => {
       dropUpLocation: "",
       pickUpDate: "",
       dropUpDate: "",
-      pickUpTime: "",
-      dropUpTime: "",
       newsLetter: false,
       termsConditions: false,
     },
@@ -117,9 +131,9 @@ const BillingStep = ({ form }: { form: FormType }) => {
               <FormLabel>Phone</FormLabel>
               <FormControl>
                 <PhoneInput
-                  value={field.value}
-                  onChange={(value) => field.onChange(value)}
+                  international
                   placeholder="Your Number"
+                  {...field}
                 />
               </FormControl>
               <FormMessage />
@@ -158,6 +172,20 @@ const BillingStep = ({ form }: { form: FormType }) => {
 };
 
 const RentalStep = ({ form }: { form: FormType }) => {
+  const { id } = useParams<{ id: string }>();
+  const queryClient = useQueryClient();
+  const data = queryClient.getQueryData([
+    QUERY_KEYS.RENT_DETAIL,
+    id,
+  ]) as AxiosResponse;
+  const rentData = (data?.data as GetByIdRentResponse) || null;
+  const possibleDropOffLocations =
+    (rentData?.item.dropOffLocation as Location[]) ?? [];
+  const pickupLocation = rentData?.item.pickUpLocation as Location;
+
+  useEffect(() => {
+    form.setValue("pickUpLocation", pickupLocation._id);
+  }, []);
   return (
     <div className="rounded-[10px] bg-white w-full lg:p-6 p-4">
       <div className="flex items-end justify-between">
@@ -188,16 +216,16 @@ const RentalStep = ({ form }: { form: FormType }) => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Locations</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <Select onValueChange={field.onChange} value={field.value}>
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="Select your city" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="m@example.com">m@example.com</SelectItem>
-                  <SelectItem value="m@google.com">m@google.com</SelectItem>
-                  <SelectItem value="m@support.com">m@support.com</SelectItem>
+                  <SelectItem value={pickupLocation._id} disabled>
+                    {pickupLocation.name}
+                  </SelectItem>
                 </SelectContent>
               </Select>
               <FormMessage />
@@ -210,40 +238,11 @@ const RentalStep = ({ form }: { form: FormType }) => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Date</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select your date" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  <SelectItem value="m@example.com">m@example.com</SelectItem>
-                  <SelectItem value="m@google.com">m@google.com</SelectItem>
-                  <SelectItem value="m@support.com">m@support.com</SelectItem>
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="pickUpTime"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Time</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select your time" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  <SelectItem value="m@example.com">m@example.com</SelectItem>
-                  <SelectItem value="m@google.com">m@google.com</SelectItem>
-                  <SelectItem value="m@support.com">m@support.com</SelectItem>
-                </SelectContent>
-              </Select>
+              <DatePicker
+                hidePastDates
+                variant="secondary"
+                onChange={(date) => field.onChange(date?.toISOString() || "")}
+              />
               <FormMessage />
             </FormItem>
           )}
@@ -271,9 +270,16 @@ const RentalStep = ({ form }: { form: FormType }) => {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="m@example.com">m@example.com</SelectItem>
-                  <SelectItem value="m@google.com">m@google.com</SelectItem>
-                  <SelectItem value="m@support.com">m@support.com</SelectItem>
+                  <RenderIf condition={possibleDropOffLocations.length === 0}>
+                    <SelectItem value="-" disabled>
+                      No drop off locations available
+                    </SelectItem>
+                  </RenderIf>
+                  {possibleDropOffLocations.map((location) => (
+                    <SelectItem key={location._id} value={location._id}>
+                      {location.name}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
               <FormMessage />
@@ -286,40 +292,11 @@ const RentalStep = ({ form }: { form: FormType }) => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Date</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select your date" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  <SelectItem value="m@example.com">m@example.com</SelectItem>
-                  <SelectItem value="m@google.com">m@google.com</SelectItem>
-                  <SelectItem value="m@support.com">m@support.com</SelectItem>
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="dropUpTime"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Time</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select your time" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  <SelectItem value="m@example.com">m@example.com</SelectItem>
-                  <SelectItem value="m@google.com">m@google.com</SelectItem>
-                  <SelectItem value="m@support.com">m@support.com</SelectItem>
-                </SelectContent>
-              </Select>
+              <DatePicker
+                hidePastDates
+                variant="secondary"
+                onChange={(date) => field.onChange(date?.toISOString() || "")}
+              />
               <FormMessage />
             </FormItem>
           )}
@@ -330,6 +307,8 @@ const RentalStep = ({ form }: { form: FormType }) => {
 };
 
 const ConfirmationStep = ({ form }: { form: FormType }) => {
+  const errors = form.formState.errors;
+
   return (
     <div className="rounded-[10px] bg-white w-full lg:p-6 p-4">
       <div className="flex items-end justify-between">
@@ -357,7 +336,12 @@ const ConfirmationStep = ({ form }: { form: FormType }) => {
               />
             </FormControl>
             <div className="leading-none">
-              <FormLabel className="cursor-pointer">
+              <FormLabel
+                className={cn(
+                  "cursor-pointer",
+                  errors.termsConditions && "text-red-500"
+                )}
+              >
                 I agree with sending an Marketing and newsletter emails. No
                 spam, promissed!
               </FormLabel>
@@ -377,7 +361,12 @@ const ConfirmationStep = ({ form }: { form: FormType }) => {
               />
             </FormControl>
             <div className="leading-none">
-              <FormLabel className="cursor-pointer">
+              <FormLabel
+                className={cn(
+                  "cursor-pointer",
+                  errors.termsConditions && "text-red-500"
+                )}
+              >
                 I agree with our terms and conditions and privacy policy.
               </FormLabel>
             </div>

@@ -34,7 +34,7 @@ import { paths } from "@/constants/paths";
 const DashboardRentListPage = () => {
   const { data, isLoading, isError } = useQuery({
     queryKey: [QUERY_KEYS.ADMIN_RENTS],
-    queryFn: rentService.getAll,
+    queryFn: () => rentService.getAll({ take: 60 }),
   });
 
   console.log("data", data);
