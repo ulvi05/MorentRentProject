@@ -7,7 +7,7 @@ type Props = {
 };
 
 export const PaymentSummary = ({ rent }: Props) => {
-  const { name, images, price } = rent;
+  const { name, images, price, discount } = rent;
   const mainImage = images[0];
 
   return (
@@ -48,7 +48,7 @@ export const PaymentSummary = ({ rent }: Props) => {
           </p>
         </div>
         <p className="text-secondary-500 text-2xl lg:text-[32px] !leading-normal font-bold">
-          {formatPrice(price)}
+          {formatPrice(price - discount)}
         </p>
       </div>
     </div>

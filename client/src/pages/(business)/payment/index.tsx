@@ -7,6 +7,8 @@ import rentService from "@/services/rent";
 import Loader from "@/components/shared/Loader";
 import { Button } from "@/components/ui/button";
 import { paths } from "@/constants/paths";
+import DynamicHelmet from "@/components/shared/DynamicHelmet";
+import { ScrollToTop } from "@/components/shared/ScrollToTop";
 
 const PaymentPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -44,10 +46,14 @@ const PaymentPage = () => {
   }
 
   return (
-    <div className="container py-6 lg:py-8 grid lg:grid-cols-[1fr_420px] xl:grid-cols-[1fr_492px] lg:gap-x-8 gap-y-8">
-      <Steps />
-      <PaymentSummary rent={rent} />
-    </div>
+    <>
+      <DynamicHelmet pageTitle="Payment Page" />
+      <div className="container py-6 lg:py-8 grid lg:grid-cols-[1fr_420px] xl:grid-cols-[1fr_492px] lg:gap-x-8 gap-y-8">
+        <Steps />
+        <PaymentSummary rent={rent} />
+      </div>
+      <ScrollToTop />
+    </>
   );
 };
 

@@ -14,6 +14,8 @@ import { ResetPassword } from "@/pages/(business)/reset-password";
 import DashboardRentListPage from "@/pages/(dashboard)/rent/list";
 import DashboardRentCreatePage from "@/pages/(dashboard)/rent/create";
 import DashboardRentEditPage from "@/pages/(dashboard)/rent/edit";
+import AuthLayout from "@/components/shared/AuthLayout";
+import ReservationsPage from "@/pages/(business)/reservations";
 
 export const router = createBrowserRouter([
   {
@@ -33,8 +35,18 @@ export const router = createBrowserRouter([
         element: <DetailPage />,
       },
       {
-        path: paths.payment(),
-        element: <PaymentPage />,
+        path: "",
+        element: <AuthLayout />,
+        children: [
+          {
+            path: paths.payment(),
+            element: <PaymentPage />,
+          },
+          {
+            path: paths.RESERVATIONS,
+            element: <ReservationsPage />,
+          },
+        ],
       },
       {
         path: paths.reset_password(),

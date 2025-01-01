@@ -28,7 +28,17 @@ const getAll = async (req: Request, res: Response) => {
 
 const create = async (req: Request, res: Response) => {
   try {
-    const { startDate, endDate, rentId } = req.matchedData;
+    const {
+      startDate,
+      endDate,
+      rentId,
+      pickUpLocation,
+      dropOffLocation,
+      billingName,
+      billingPhoneNumber,
+      billingAddress,
+      billingTownCity,
+    } = req.matchedData;
 
     const rent = await Rent.findById(rentId);
 
@@ -59,9 +69,17 @@ const create = async (req: Request, res: Response) => {
     const reservation = new Reservation({
       rent: rentId,
       user: req.user?._id,
+      pickUpLocation,
+      dropOffLocation,
       startDate,
       endDate,
       total,
+      billing: {
+        name: billingName,
+        address: billingAddress,
+        phoneNumber: billingPhoneNumber,
+        townCity: billingTownCity,
+      },
     });
 
     await reservation.save();

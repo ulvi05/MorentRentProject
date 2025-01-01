@@ -11,12 +11,18 @@ import PeopleImg from "@/assets/icons/people.svg";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Rent } from "@/types";
 import { formatPrice } from "@/lib/utils";
+import { useSelector } from "react-redux";
+import { selectUserData } from "@/store/features/userSlice";
+import { toast } from "sonner";
+import { ModalTypeEnum, useDialog } from "@/hooks/useDialog";
 
 type Props = {
   rent: Rent;
 };
 
 export const RentCard = ({ rent }: Props) => {
+  const { user } = useSelector(selectUserData);
+  const { openDialog } = useDialog();
   const [isLiked, setIsLiked] = useState(false);
 
   const { _id, name, category, fuel, gearBox, images, capacity, price } = rent;
@@ -73,7 +79,16 @@ export const RentCard = ({ rent }: Props) => {
           <span className="text-sm text-secondary-300">day</span>
         </p>
         <Button asChild>
-          <Link replace to={paths.payment(_id)}>
+          <Link
+            replace
+            to={paths.payment(_id)}
+            onClick={() => {
+              if (!user) {
+                toast.warning("Please login to rent a car");
+                openDialog(ModalTypeEnum.LOGIN);
+              }
+            }}
+          >
             Rent Now
           </Link>
         </Button>

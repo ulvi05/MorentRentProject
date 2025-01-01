@@ -155,8 +155,12 @@ const ActionForm = ({ type }: Props) => {
     defaultValues: {
       name: "",
       description: "",
-      price: 0,
       categoryId: "",
+      gearBox: "",
+      pickUpLocation: "",
+      dropOffLocation: [],
+      showInRecommendation: false,
+      images: isEdit ? undefined : [],
     },
   });
 
@@ -176,10 +180,6 @@ const ActionForm = ({ type }: Props) => {
   }
 
   useEffect(() => {
-    if (type === "create") {
-      form.reset();
-    }
-
     if (editItem) {
       form.setValue("name", editItem.name);
       form.setValue("description", editItem.description);
@@ -196,7 +196,11 @@ const ActionForm = ({ type }: Props) => {
       form.setValue("capacity", editItem.capacity);
       form.setValue("showInRecommendation", editItem.showInRecommendation);
     }
-  }, [type, editItem]);
+
+    if (type === "create") {
+      form.reset();
+    }
+  }, [type, editItem, form]);
 
   if (isLoading) {
     return (
@@ -336,8 +340,8 @@ const ActionForm = ({ type }: Props) => {
                   <FormLabel>Category</FormLabel>
                   <Select
                     onValueChange={field.onChange}
-                    defaultValue={field.value}
-                    value={field.value}
+                    defaultValue={field.value || ""}
+                    value={field.value || ""}
                   >
                     <FormControl>
                       <SelectTrigger>
@@ -364,8 +368,8 @@ const ActionForm = ({ type }: Props) => {
                   <FormLabel>Pick Up Location</FormLabel>
                   <Select
                     onValueChange={field.onChange}
-                    defaultValue={field.value}
-                    value={field.value}
+                    defaultValue={field.value || ""}
+                    value={field.value || ""}
                   >
                     <FormControl>
                       <SelectTrigger>
@@ -394,7 +398,7 @@ const ActionForm = ({ type }: Props) => {
                     options={locationOptions}
                     onValueChange={field.onChange}
                     // defaultValue={selectedFrameworks}
-                    value={field.value}
+                    value={field.value || []}
                     placeholder="Select Drop Off Locations"
                     variant="inverted"
                   />
@@ -460,8 +464,9 @@ const ActionForm = ({ type }: Props) => {
           <RenderIf condition={!!editItem?.images.length}>
             <h4 className="mb-1">Existing Images</h4>
             <div className="grid grid-cols-3 gap-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8">
-              {editItem?.images.map((image: string) => (
+              {editItem?.images.map((image: string, index: number) => (
                 <img
+                  key={index}
                   src={image}
                   alt="Rent Image"
                   className="object-cover w-full rounded-lg"

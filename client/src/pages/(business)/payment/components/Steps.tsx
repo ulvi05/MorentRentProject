@@ -1,5 +1,16 @@
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { GetByIdRentResponse } from "@/services/rent/types";
+import { useNavigate, useParams } from "react-router-dom";
 import { useForm, UseFormReturn } from "react-hook-form";
+import reservationService from "@/services/reservation";
+import { RenderIf } from "@/components/shared/RenderIf";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { QUERY_KEYS } from "@/constants/query-keys";
+import { paths } from "@/constants/paths";
+import { AxiosError, AxiosResponse } from "axios";
+import { Location } from "@/types";
+import { useEffect } from "react";
+import { cn } from "@/lib/utils";
 import { z } from "zod";
 
 import {
@@ -19,19 +30,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { DatePicker } from "@/components/ui/date-picker";
+import SecurityImg from "@/assets/icons/security.svg";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
-import SecurityImg from "@/assets/icons/security.svg";
-import { useQueryClient } from "@tanstack/react-query";
-import { QUERY_KEYS } from "@/constants/query-keys";
-import { RenderIf } from "@/components/shared/RenderIf";
-import { DatePicker } from "@/components/ui/date-picker";
-import { cn } from "@/lib/utils";
-import { useParams } from "react-router-dom";
-import { GetByIdRentResponse } from "@/services/rent/types";
-import { AxiosResponse } from "axios";
-import { Location } from "@/types";
-import { useEffect } from "react";
+import Loader from "@/components/shared/Loader";
+import { toast } from "sonner";
+import { CreateReservationResponseType } from "@/services/reservation/types";
 
 const FormSchema = z.object({
   name: z.string().min(4, {
@@ -43,11 +48,11 @@ const FormSchema = z.object({
   pickUpLocation: z
     .string()
     .min(1, { message: "Pick up location is required" }),
-  dropUpLocation: z
+  dropOffLocation: z
     .string()
     .min(1, { message: "Drop off location is required" }),
   pickUpDate: z.string().min(1, { message: "Pick up date is required" }),
-  dropUpDate: z.string().min(1, { message: "Drop off date is required" }),
+  dropOffDate: z.string().min(1, { message: "Drop off date is required" }),
   newsLetter: z.literal<boolean>(true, {
     message: "You must agree to receive newsletter",
   }),
@@ -59,6 +64,8 @@ const FormSchema = z.object({
 type FormType = UseFormReturn<z.infer<typeof FormSchema>>;
 
 export const Steps = () => {
+  const navigate = useNavigate();
+  const { id } = useParams<{ id: string }>();
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -67,16 +74,38 @@ export const Steps = () => {
       address: "",
       city: "",
       pickUpLocation: "",
-      dropUpLocation: "",
+      dropOffLocation: "",
       pickUpDate: "",
-      dropUpDate: "",
+      dropOffDate: "",
       newsLetter: false,
       termsConditions: false,
     },
   });
+  const { mutate, isPending } = useMutation({
+    mutationFn: reservationService.create,
+    onSuccess: () => {
+      toast.success("Reservations created successfully");
+      navigate(paths.RESERVATIONS);
+      form.reset();
+    },
+    onError: (error: AxiosError<CreateReservationResponseType>) => {
+      toast.error(error?.response?.data?.message || "Something went wrong");
+    },
+  });
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    console.log(data);
+    const payload = {
+      rentId: id!,
+      startDate: data.pickUpDate,
+      endDate: data.dropOffDate,
+      billingName: data.name,
+      billingPhoneNumber: data.phone,
+      billingAddress: data.address,
+      billingTownCity: data.city,
+      dropOffLocation: data.dropOffLocation,
+      pickUpLocation: data.pickUpLocation,
+    };
+    mutate(payload);
   }
 
   return (
@@ -87,7 +116,7 @@ export const Steps = () => {
       >
         <BillingStep form={form} />
         <RentalStep form={form} />
-        <ConfirmationStep form={form} />
+        <ConfirmationStep pending={isPending} form={form} />
       </form>
     </Form>
   );
@@ -259,7 +288,7 @@ const RentalStep = ({ form }: { form: FormType }) => {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 lg:gap-x-8 gap-y-4 lg:gap-y-6">
         <FormField
           control={form.control}
-          name="dropUpLocation"
+          name="dropOffLocation"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Locations</FormLabel>
@@ -288,7 +317,7 @@ const RentalStep = ({ form }: { form: FormType }) => {
         />
         <FormField
           control={form.control}
-          name="dropUpDate"
+          name="dropOffDate"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Date</FormLabel>
@@ -306,7 +335,13 @@ const RentalStep = ({ form }: { form: FormType }) => {
   );
 };
 
-const ConfirmationStep = ({ form }: { form: FormType }) => {
+const ConfirmationStep = ({
+  form,
+  pending,
+}: {
+  form: FormType;
+  pending: boolean;
+}) => {
   const errors = form.formState.errors;
 
   return (
@@ -373,7 +408,12 @@ const ConfirmationStep = ({ form }: { form: FormType }) => {
           </FormItem>
         )}
       />
-      <Button className="mt-6 lg:mt-8">Rent Now</Button>
+      <Button disabled={pending} className="mt-6 lg:mt-8">
+        <RenderIf condition={pending}>
+          <Loader />
+        </RenderIf>
+        Rent Now
+      </Button>
       <div className="flex flex-col mt-4 gap-y-4 lg:mt-8">
         <img src={SecurityImg} alt="security-icn" className="w-8 h-8" />
         <div className="flex flex-col items-start gap-1 lg:gap-2">

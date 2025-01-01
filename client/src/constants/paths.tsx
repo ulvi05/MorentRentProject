@@ -4,6 +4,7 @@ export const paths = {
   detail: (id = ":id") => `/detail/${id}`,
   payment: (id = ":id") => `/payment/${id}`,
   reset_password: (token = ":token") => `/reset-password/${token}`,
+  RESERVATIONS: "/reservations",
   DASHBOARD: {
     MAIN: "/dashboard",
     RENTS: {

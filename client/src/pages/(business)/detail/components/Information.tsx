@@ -8,12 +8,18 @@ import { Link } from "react-router-dom";
 import { Rent } from "@/types";
 import { paths } from "@/constants/paths";
 import { formatPrice } from "@/lib/utils";
+import { toast } from "sonner";
+import { useSelector } from "react-redux";
+import { selectUserData } from "@/store/features/userSlice";
+import { ModalTypeEnum, useDialog } from "@/hooks/useDialog";
 
 type Props = {
   rent: Rent;
 };
 
 export const InformationSection = ({ rent }: Props) => {
+  const { user } = useSelector(selectUserData);
+  const { openDialog } = useDialog();
   const [isLiked, setIsLiked] = useState(false);
   const {
     _id,
@@ -78,7 +84,16 @@ export const InformationSection = ({ rent }: Props) => {
           </p>
         </div>
         <Button asChild>
-          <Link replace to={paths.payment(_id)}>
+          <Link
+            replace
+            to={paths.payment(_id)}
+            onClick={() => {
+              if (!user) {
+                toast.warning("Please login to rent a car");
+                openDialog(ModalTypeEnum.LOGIN);
+              }
+            }}
+          >
             Rent Now
           </Link>
         </Button>

@@ -10,6 +10,7 @@ import Loader from "@/components/shared/Loader";
 import { paths } from "@/constants/paths";
 import { Button } from "@/components/ui/button";
 import { ScrollToTop } from "@/components/shared/ScrollToTop";
+import DynamicHelmet from "@/components/shared/DynamicHelmet";
 
 export const DetailPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -54,20 +55,23 @@ export const DetailPage = () => {
   }
 
   return (
-    <div className="container max-w-[1144px] py-6 lg:py-8">
-      <div className="grid lg:grid-cols-[1fr_492px] xl:grid-cols-2 gap-x-8">
-        <ImagesSection images={rent.images} />
-        <InformationSection rent={rent} />
+    <>
+      <DynamicHelmet pageTitle="Detail Page" />
+      <div className="container max-w-[1144px] py-6 lg:py-8">
+        <div className="grid lg:grid-cols-[1fr_492px] xl:grid-cols-2 gap-x-8">
+          <ImagesSection images={rent.images} />
+          <InformationSection rent={rent} />
+        </div>
+        <ReviewsSection />
+        <RentList maxCols={3} heading="Recent Cars" />
+        <RentList
+          maxCols={3}
+          heading="Recomendation Cars"
+          isLoading={recommendedLoading}
+          rents={recommendedRents}
+        />
+        <ScrollToTop />
       </div>
-      <ReviewsSection />
-      <RentList maxCols={3} heading="Recent Cars" />
-      <RentList
-        maxCols={3}
-        heading="Recomendation Cars"
-        isLoading={recommendedLoading}
-        rents={recommendedRents}
-      />
-      <ScrollToTop />
-    </div>
+    </>
   );
 };

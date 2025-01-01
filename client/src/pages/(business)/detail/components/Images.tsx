@@ -22,8 +22,6 @@ export const ImagesSection = ({ images }: Props) => {
         spaceBetween={50}
         slidesPerView={1}
         pagination={{ clickable: true }}
-        // onSlideChange={() => console.log("slide change")}
-        // onSwiper={(swiper) => console.log(swiper)}
         className="w-full"
         modules={[Navigation, Zoom]}
       >

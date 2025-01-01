@@ -38,6 +38,27 @@ export type Rent = {
   showInRecommendation: boolean;
 };
 
+export type Reservation = {
+  billing: {
+    name: string;
+    phoneNumber: string;
+    address: string;
+    townCity: string;
+  };
+  createdAt: string;
+  dropOffLocation: string;
+  endDate: string;
+  id: string;
+  pickUpLocation: string;
+  rent: string;
+  startDate: string;
+  status: ReservationStatus;
+  total: number;
+  updatedAt: string;
+  user: string;
+  _id: string;
+};
+
 export type SelectOption = {
   value: string;
   label: string;
@@ -46,4 +67,11 @@ export type SelectOption = {
 export enum UserRole {
   Admin = "admin",
   User = "user",
+}
+
+export enum ReservationStatus {
+  Pending = "pending",
+  Approved = "approved",
+  Rejected = "rejected",
+  Canceled = "canceled",
 }

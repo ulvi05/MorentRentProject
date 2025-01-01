@@ -49,7 +49,7 @@ export const CustomSelect = ({
           <img src={ArrowDownImg} alt="arrow-down" />
         </div>
         <RenderIf condition={isOpen}>
-          <div className="absolute z-20 w-full mt-1 bg-white border top-6 border-secondary/50">
+          <div className="absolute z-20 w-full mt-1 overflow-auto bg-white border top-6 border-secondary/50 max-h-60">
             <ul>
               {options.map((option) => (
                 <li
