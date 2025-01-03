@@ -7,6 +7,11 @@ const reviewSchema = new Schema({
     ref: "User",
     required: true,
   },
+  rent: {
+    type: Types.ObjectId,
+    ref: "Rent",
+    required: true,
+  },
   content: {
     type: String,
     required: true,
@@ -20,6 +25,11 @@ const reviewSchema = new Schema({
   createdAt: {
     type: Date,
     default: Date.now,
+  },
+  status: {
+    type: String,
+    enum: ["pending", "accepted", "rejected"],
+    default: "pending",
   },
 });
 

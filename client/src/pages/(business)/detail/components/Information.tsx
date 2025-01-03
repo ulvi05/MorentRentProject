@@ -33,6 +33,8 @@ export const InformationSection = ({ rent }: Props) => {
     discount,
   } = rent;
 
+  const finalPrice = discount ? price - discount : price;
+
   const specifications = [
     { label: "Type Car", value: category.name },
     { label: "Capacity", value: `${capacity} Person` },
@@ -75,7 +77,7 @@ export const InformationSection = ({ rent }: Props) => {
       <div className="flex items-center justify-between mt-12 lg:mt-16">
         <div>
           <p className="text-[28px] font-bold text-secondary-500">
-            {formatPrice(price - discount)}/{" "}
+            {formatPrice(finalPrice)}/{" "}
             <span className="text-base text-secondary-300">days</span>
           </p>
 

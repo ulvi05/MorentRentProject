@@ -408,11 +408,13 @@ const ConfirmationStep = ({
           </FormItem>
         )}
       />
-      <Button disabled={pending} className="mt-6 lg:mt-8">
+      <Button disabled={pending} className="relative mt-6 lg:mt-8">
         <RenderIf condition={pending}>
-          <Loader />
+          <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-75">
+            <Loader className="w-6 h-6" />
+          </div>
         </RenderIf>
-        Rent Now
+        <span className={pending ? "opacity-0" : "opacity-100"}>Rent Now</span>
       </Button>
       <div className="flex flex-col mt-4 gap-y-4 lg:mt-8">
         <img src={SecurityImg} alt="security-icn" className="w-8 h-8" />

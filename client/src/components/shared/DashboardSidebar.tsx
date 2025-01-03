@@ -1,4 +1,4 @@
-import { CarIcon, Home } from "lucide-react";
+import { Calendar, CarIcon, Home } from "lucide-react";
 import { paths } from "@/constants/paths";
 import { Link } from "react-router-dom";
 
@@ -23,6 +23,11 @@ const items = [
     title: "Car Rents",
     url: paths.DASHBOARD.RENTS.LIST,
     icon: CarIcon,
+  },
+  {
+    title: "Reservations",
+    url: paths.DASHBOARD.RESERVATIONS.LIST,
+    icon: Calendar,
   },
 ];
 

@@ -1,4 +1,4 @@
-import { Reservation } from "@/types";
+import { Reservation, ReservationStatus } from "@/types";
 
 export type CreateReservationRequestPayload = {
   billingName: string;
@@ -15,4 +15,9 @@ export type CreateReservationRequestPayload = {
 export type CreateReservationResponseType = {
   item?: Reservation;
   message: string;
+};
+
+export type ChangeStatusRequestPayload = {
+  id: string;
+  status: ReservationStatus.Approved | ReservationStatus.Rejected;
 };

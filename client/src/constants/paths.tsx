@@ -12,5 +12,8 @@ export const paths = {
       CREATE: "/dashboard/rents/create",
       EDIT: (id: string) => `/dashboard/rents/edit/${id}`,
     },
+    RESERVATIONS: {
+      LIST: "/dashboard/reservations",
+    },
   },
 };

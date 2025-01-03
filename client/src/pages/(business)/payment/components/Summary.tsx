@@ -10,6 +10,7 @@ export const PaymentSummary = ({ rent }: Props) => {
   const { name, images, price, discount } = rent;
   const mainImage = images[0];
 
+  const finalPrice = discount ? price - discount : price;
   return (
     <div className="rounded-[10px] bg-white p-4 lg:p-6 h-fit lg:sticky top-[160px]">
       <h3 className="text-lg lg:text-xl font-bold leading-[150%] tracking-[-0.6px] text-secondary-500">
@@ -48,7 +49,7 @@ export const PaymentSummary = ({ rent }: Props) => {
           </p>
         </div>
         <p className="text-secondary-500 text-2xl lg:text-[32px] !leading-normal font-bold">
-          {formatPrice(price - discount)}
+          {formatPrice(finalPrice)}
         </p>
       </div>
     </div>

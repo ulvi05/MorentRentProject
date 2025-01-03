@@ -57,6 +57,10 @@ const reservationSchema = new Schema({
       required: true,
     },
   },
+  hasReview: {
+    type: Boolean,
+    default: false,
+  },
   createdAt: {
     type: Date,
     default: Date.now,

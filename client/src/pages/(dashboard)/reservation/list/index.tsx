@@ -2,16 +2,13 @@ import { useQuery } from "@tanstack/react-query";
 import { columns } from "./columns";
 import { DataTable } from "./data-table";
 import { QUERY_KEYS } from "@/constants/query-keys";
-import rentService from "@/services/rent";
 import Loader from "@/components/shared/Loader";
-import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
-import { paths } from "@/constants/paths";
+import reservationService from "@/services/reservation";
 
-const DashboardRentListPage = () => {
+const DashboardReservationListPage = () => {
   const { data, isLoading, isError } = useQuery({
-    queryKey: [QUERY_KEYS.ADMIN_RENTS],
-    queryFn: () => rentService.getAll({ take: 50 }),
+    queryKey: [QUERY_KEYS.ADMIN_RESERVATIONS],
+    queryFn: () => reservationService.getAll(),
   });
 
   if (isLoading) {
@@ -31,17 +28,17 @@ const DashboardRentListPage = () => {
   }
 
   const items = data?.data?.items || [];
+
+  console.log(items);
+
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold text-primary">Rents</h2>
-        <Button asChild>
-          <Link to={paths.DASHBOARD.RENTS.CREATE}>Create Rent</Link>
-        </Button>
+        <h2 className="text-2xl font-bold text-primary">Reservations</h2>
       </div>
       <DataTable columns={columns} data={items} />
     </div>
   );
 };
 
-export default DashboardRentListPage;
+export default DashboardReservationListPage;

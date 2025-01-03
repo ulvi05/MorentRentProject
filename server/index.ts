@@ -5,15 +5,16 @@ import cookieParser from "cookie-parser";
 import session from "express-session";
 import passport from "passport";
 import cors from "cors";
+import path from "path";
 
 import reservationRoutes from "./src/routes/reservation";
 import locationRoutes from "./src/routes/location";
 import categoryRoutes from "./src/routes/category";
 import authRoutes from "./src/routes/auth";
 import rentRoutes from "./src/routes/rent";
+import reviewRoutes from "./src/routes/review";
 import "./src/mongoose/schemas/user";
 import "./src/auth/local-strategy";
-import path from "path";
 
 dotenv.config();
 
@@ -48,6 +49,7 @@ app.use("/location", locationRoutes);
 app.use("/category", categoryRoutes);
 app.use("/rent", rentRoutes);
 app.use("/reservation", reservationRoutes);
+app.use("/review", reviewRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

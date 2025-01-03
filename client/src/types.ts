@@ -50,13 +50,14 @@ export type Reservation = {
   endDate: string;
   id: string;
   pickUpLocation: string;
-  rent: string;
+  rent: Rent | string;
   startDate: string;
   status: ReservationStatus;
   total: number;
   updatedAt: string;
   user: string;
   _id: string;
+  hasReview: boolean;
 };
 
 export type SelectOption = {
@@ -73,5 +74,5 @@ export enum ReservationStatus {
   Pending = "pending",
   Approved = "approved",
   Rejected = "rejected",
-  Canceled = "canceled",
+  Cancelled = "cancelled",
 }

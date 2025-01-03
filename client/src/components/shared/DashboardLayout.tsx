@@ -13,7 +13,7 @@ const DashboardLayout = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-100">
-        <Loader />
+        <Loader className="w-12 h-12" />
       </div>
     );
   }
