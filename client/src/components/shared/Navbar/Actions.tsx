@@ -57,17 +57,17 @@ const NavbarActions = () => {
             <DropdownMenuLabel>My Account</DropdownMenuLabel>
             <DropdownMenuSeparator />
             {user.role === UserRole.Admin && (
-              <DropdownMenuItem>
+              <DropdownMenuItem asChild className="cursor-pointer">
                 <Link to={paths.DASHBOARD.MAIN}>Dashboard</Link>
               </DropdownMenuItem>
             )}
-            <DropdownMenuItem>
+            <DropdownMenuItem asChild className="cursor-pointer">
               <Link to="/profile">Profile</Link>
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            <DropdownMenuItem asChild className="cursor-pointer">
               <Link to="/reservations">Reservations</Link>
             </DropdownMenuItem>
-            <DropdownMenuItem className="cursor-pointer" onClick={handleLogout}>
+            <DropdownMenuItem onClick={handleLogout}>
               <LogOut />
               <span>Log out</span>
             </DropdownMenuItem>

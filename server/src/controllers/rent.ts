@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import Rent from "../mongoose/schemas/rent";
 import Category from "../mongoose/schemas/category";
+import Review from "../mongoose/schemas/review";
 
 const getAll = async (req: Request, res: Response) => {
   try {
@@ -98,6 +99,11 @@ const getById = async (req: Request, res: Response) => {
       "dropOffLocation",
     ]);
 
+    const reviews = await Review.find({
+      rent: id,
+      status: "approved",
+    }).populate("author", "name surname");
+
     if (!rent) {
       res.status(404).json({
         message: "Not Found",
@@ -111,7 +117,10 @@ const getById = async (req: Request, res: Response) => {
 
     res.json({
       message: "Success",
-      item: rent,
+      item: {
+        ...rent.toObject(),
+        reviews,
+      },
     });
   } catch (error) {
     console.log(error);

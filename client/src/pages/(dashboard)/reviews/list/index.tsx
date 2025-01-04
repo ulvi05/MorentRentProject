@@ -2,13 +2,13 @@ import { useQuery } from "@tanstack/react-query";
 import { columns } from "./columns";
 import { QUERY_KEYS } from "@/constants/query-keys";
 import Loader from "@/components/shared/Loader";
-import reservationService from "@/services/reservation";
+import reviewService from "@/services/review";
 import { DataTable } from "@/components/shared/DataTable";
 
-const DashboardReservationListPage = () => {
+const DashboardReviewListPage = () => {
   const { data, isLoading, isError } = useQuery({
-    queryKey: [QUERY_KEYS.ADMIN_RESERVATIONS],
-    queryFn: () => reservationService.getAll(),
+    queryKey: [QUERY_KEYS.ADMIN_REVIEWS],
+    queryFn: () => reviewService.getAll(),
   });
 
   if (isLoading) {
@@ -32,11 +32,11 @@ const DashboardReservationListPage = () => {
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold text-primary">Reservations</h2>
+        <h2 className="text-2xl font-bold text-primary">Reviews</h2>
       </div>
       <DataTable columns={columns} data={items} />
     </div>
   );
 };
 
-export default DashboardReservationListPage;
+export default DashboardReviewListPage;

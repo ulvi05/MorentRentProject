@@ -31,6 +31,7 @@ export const InformationSection = ({ rent }: Props) => {
     category,
     price,
     discount,
+    reviews,
   } = rent;
 
   const finalPrice = discount ? price - discount : price;
@@ -42,15 +43,18 @@ export const InformationSection = ({ rent }: Props) => {
     { label: "Gasoline", value: `${fuel}L` },
   ];
 
+  const rating = Math.round(
+    reviews.reduce((acc, review) => review.rating + acc, 0) / reviews.length
+  );
   return (
     <div className="bg-white rounded-[10px] p-4 lg:p-6 relative">
       <h1 className="text-2xl lg:text-[32px] !leading-[150%] tracking-[-0.96px] font-bold text-secondary-500">
         {name}
       </h1>
       <div className="flex items-center mt-2 gap-x-2">
-        <RatingStar rating={4} />
+        <RatingStar rating={rating} />
         <p className="text-secondary text-sm font-medium tracing-[-0.28px]">
-          440+ Reviewer
+          {reviews.length} Reviewer
         </p>
       </div>
       <button

@@ -8,6 +8,8 @@ const router = Router();
 
 router.get("/", authorize({ isAdmin: true }), reviewController.getAll);
 
+router.get("/:rentId", reviewController.getByRentId);
+
 router.post(
   "/",
   authorize({}),

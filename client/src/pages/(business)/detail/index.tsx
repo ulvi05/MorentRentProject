@@ -62,7 +62,7 @@ export const DetailPage = () => {
           <ImagesSection images={rent.images} />
           <InformationSection rent={rent} />
         </div>
-        <ReviewsSection />
+        <ReviewsSection reviews={rent.reviews} />
         <RentList maxCols={3} heading="Recent Cars" />
         <RentList
           maxCols={3}

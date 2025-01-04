@@ -17,6 +17,7 @@ import DashboardRentEditPage from "@/pages/(dashboard)/rent/edit";
 import AuthLayout from "@/components/shared/AuthLayout";
 import ReservationsPage from "@/pages/(business)/reservations";
 import DashboardReservationListPage from "@/pages/(dashboard)/reservation/list";
+import DashboardReviewListPage from "@/pages/(dashboard)/reviews/list";
 
 export const router = createBrowserRouter([
   {
@@ -76,6 +77,10 @@ export const router = createBrowserRouter([
           {
             path: paths.DASHBOARD.RESERVATIONS.LIST,
             element: <DashboardReservationListPage />,
+          },
+          {
+            path: paths.DASHBOARD.REVIEWS.LIST,
+            element: <DashboardReviewListPage />,
           },
         ],
       },
