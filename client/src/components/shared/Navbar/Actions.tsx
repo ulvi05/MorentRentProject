@@ -62,9 +62,6 @@ const NavbarActions = () => {
               </DropdownMenuItem>
             )}
             <DropdownMenuItem asChild className="cursor-pointer">
-              <Link to="/profile">Profile</Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild className="cursor-pointer">
               <Link to="/reservations">Reservations</Link>
             </DropdownMenuItem>
             <DropdownMenuItem onClick={handleLogout}>

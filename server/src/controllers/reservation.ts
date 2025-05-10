@@ -21,7 +21,11 @@ const getAll = async (req: Request, res: Response) => {
     reservations.forEach((reservation) => {
       (reservation.rent as TRent).images = (
         reservation.rent as TRent
-      ).images.map((image) => `${process.env.BASE_URL}/public/rent/${image}`);
+      ).images.map((image) =>
+        image.startsWith("http")
+          ? image
+          : `${process.env.BASE_URL}/public/rent/${image}`
+      );
     });
 
     res.json({

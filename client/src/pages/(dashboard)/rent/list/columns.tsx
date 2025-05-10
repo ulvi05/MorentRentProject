@@ -11,7 +11,7 @@ export const columns: ColumnDef<Rent>[] = [
     cell(data) {
       return (
         <img
-          src={data.row.original.images[2]}
+          src={data.row.original.images[0]}
           alt={"Rent Image"}
           className="object-cover w-10 h-10 rounded-lg"
         />

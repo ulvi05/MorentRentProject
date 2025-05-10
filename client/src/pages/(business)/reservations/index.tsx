@@ -82,7 +82,7 @@ const ReservationCard = ({ reservation }: { reservation: Reservation }) => {
         <div className="flex items-center">
           <img
             src={rent.images[0]}
-            alt={""}
+            alt={"rent image"}
             className="object-cover w-24 h-24 rounded-lg"
           />
           <div className="ml-4">

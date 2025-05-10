@@ -70,8 +70,10 @@ const getAll = async (req: Request, res: Response) => {
     const total = await Rent.countDocuments(filter);
 
     items.forEach((item) => {
-      item.images = item.images.map(
-        (image) => `${process.env.BASE_URL}/public/rent/${image}`
+      item.images = item.images.map((image) =>
+        image.startsWith("http")
+          ? image
+          : `${process.env.BASE_URL}/public/rent/${image}`
       );
     });
     res.json({
@@ -111,8 +113,10 @@ const getById = async (req: Request, res: Response) => {
       return;
     }
 
-    rent.images = rent.images.map(
-      (image) => `${process.env.BASE_URL}/public/rent/${image}`
+    rent.images = rent.images.map((image) =>
+      image.startsWith("http")
+        ? image
+        : `${process.env.BASE_URL}/public/rent/${image}`
     );
 
     res.json({
