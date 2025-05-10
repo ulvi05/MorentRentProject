@@ -26,7 +26,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: `${process.env.FE_BASE_URL}`,
     credentials: true,
   })
 );
@@ -37,9 +37,13 @@ app.use(
     saveUninitialized: false,
     cookie: {
       maxAge: 1000 * 60 * 60 * 24,
+      httpOnly: true,
+      secure: process.env.NODE_ENV !== "development",
+      sameSite: process.env.NODE_ENV !== "development" ? "none" : "lax",
     },
   })
 );
+app.set("trust proxy", 1);
 app.use("/public", express.static(path.join(__dirname, "public")));
 app.use(passport.initialize());
 app.use(passport.session());
