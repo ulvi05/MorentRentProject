@@ -84,7 +84,7 @@ const forgotPassword = async (req: Request, res: Response) => {
       html: `<div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #e1e1e1; border-radius: 10px; background-color: #f9f9f9;">
         <h2 style="color: #0095f6;">Hello,</h2>
         <p style="font-size: 16px;">You requested a password reset. Click the button below to reset your password:</p>
-        <a href="http://localhost:5173/reset-password/${token}" style="display: inline-block; padding: 10px 20px; font-size: 16px; color: white; background-color: #0095f6; text-decoration: none; border-radius: 5px;">Reset Password</a>
+        <a href="${process.env.FE_BASE_URL}/reset-password/${token}" style="display: inline-block; padding: 10px 20px; font-size: 16px; color: white; background-color: #0095f6; text-decoration: none; border-radius: 5px;">Reset Password</a>
         <p style="font-size: 14px; color: #666; margin-top: 20px;">If you did not request this, please ignore this email.</p>
         <p style="font-size: 14px; color: #666;">Thank you, <br> Your Team</p>
       </div>`,
